@@ -1,7 +1,4 @@
-import { randomUUID } from 'crypto'
-
 interface RoomInput {
-    id: string
     movieTheaterId: string
     number: number
     layout: (number | null)[][]
@@ -16,7 +13,6 @@ interface CreateRoomInput {
 }
 
 export class Room {
-    private id: string
     private movieTheaterId: string
     private number: number
     private layout: (number | null)[][]
@@ -29,7 +25,6 @@ export class Room {
         technologyIds,
     }: CreateRoomInput) {
         return new Room({
-            id: randomUUID(),
             movieTheaterId,
             number,
             layout,
@@ -38,16 +33,11 @@ export class Room {
     }
 
     constructor({
-        id,
         movieTheaterId,
         number,
         layout,
         technologyIds
     }: RoomInput) {
-        if (!id) {
-            throw Error('The room id field is required')
-        }
-
         if (!movieTheaterId) {
             throw Error('The room movieTheaterId field is required')
         }
@@ -75,16 +65,18 @@ export class Room {
             }
         }
 
-        this.id = id
         this.movieTheaterId = movieTheaterId
         this.number = number
         this.layout = layout
         this.technologyIds = technologyIds
     }
 
+    getNumber() {
+        return this.number
+    }
+
     export() {
         return {
-            id: this.id,
             movieTheaterId: this.movieTheaterId,
             number: this.number,
             layout: this.layout,

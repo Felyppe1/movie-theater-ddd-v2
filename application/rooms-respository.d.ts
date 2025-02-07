@@ -1,6 +1,11 @@
 import { Room } from "../domain/core/movie-theater-settings/room"
 
+interface GetOneInput {
+    number: number
+    movieTheaterId: string
+}
+
 export interface RoomsRepository {
     save(room: Room): Promise<void>
-    getById(id: string): Promise<Room | null>
+    getOne(data: GetOneInput): Promise<Room | null>
 }
