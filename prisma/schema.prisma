@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum TECHNOLOGY {
+    TWO_D @map("2D")
+    THREE_D @map("3D")
+    IMAX
+}
+
+model Technology {
+    name TECHNOLOGY
+    room_id String
+
+    room   Room @relation(fields: [room_id], references: [id])
+
+    @@id([name, room_id])
+}
+
+model Room {
+    id String @id @default(uuid())
+    number Int
+
+    technologies Technology[]
+    chairs Chair[]
+}
+
+model Chair {
+    row Int
+    column Int
+    active Boolean
+    room_id String
+
+    room Room @relation(fields: [room_id], references: [id])
+
+    @@id([row, column, room_id])
+}
+
+// model Technology {
+//     name TECHNOLOGY @id
+//     rooms Room[]
+// }
+
+// model Room {
+//     id String @id @default(uuid())
+//     number Int
+//     technologies Technology[]
+// }
+
+// model Movie {
+
+// }
