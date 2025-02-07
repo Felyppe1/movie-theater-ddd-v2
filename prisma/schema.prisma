@@ -2,51 +2,107 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum TECHNOLOGY {
-    TWO_D @map("2D")
-    THREE_D @map("3D")
-    IMAX
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Technology {
-    name TECHNOLOGY
-    room_id String
-
-    room   Room @relation(fields: [room_id], references: [id])
-
-    @@id([name, room_id])
+enum GENDER {
+    HORROR
+    COMEDY
+    ACTION
 }
 
-model Room {
-    id String @id @default(uuid())
-    number Int
+enum CLASSIFICATION {
+    FREE
+    TWELVE @map("12")
 
-    technologies Technology[]
-    chairs Chair[]
 }
 
 model Chair {
     row Int
     column Int
     active Boolean
-    room_id String
+    room_number Int
+    movie_theater_id String
 
-    room Room @relation(fields: [room_id], references: [id])
+    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
 
-    @@id([row, column, room_id])
+    @@id([row, column, room_number, movie_theater_id])
 }
 
-// model Technology {
-//     name TECHNOLOGY @id
-//     rooms Room[]
-// }
+model Technology {
+    id Int @id @default(autoincrement())
+    name String
 
-// model Room {
-//     id String @id @default(uuid())
-//     number Int
-//     technologies Technology[]
-// }
+    rooms RoomTechnology[]
+    movies Movie[]
+}
 
-// model Movie {
+model Room {
+    number Int
+    movie_theater_id String
 
-// }
+    movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
+    technologies RoomTechnology[]
+    chairs Chair[]
+
+    @@id([number, movie_theater_id])
+}
+
+model RoomTechnology {
+    technology_id Int
+    room_number Int
+    movie_theater_id String
+
+    technology Technology @relation(fields: [technology_id], references: [id])
+    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+
+    @@id([technology_id, room_number, movie_theater_id])
+}
+
+model MovieTheater {
+    id String @id @default(uuid())
+    number String
+    complement String?
+    zipCode String
+    street String
+    city String
+    state String
+
+    chairTypes MovieTheaterChairType[]
+    rooms Room[]
+}
+
+model ChairType {
+    id Int @id @default(autoincrement())
+    name String
+
+    movieTheaters MovieTheaterChairType[]
+}
+
+model MovieTheaterChairType {
+    chair_type_id Int
+    movie_theater_id String
+    value Float?
+
+    chairType ChairType @relation(fields: [chair_type_id], references: [id])
+    movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
+    
+    @@id([chair_type_id, movie_theater_id])
+}
+
+model Movie {
+    id String @id @default(uuid())
+    name String
+    sinopsis String
+    duration Int
+    poster String
+    gender GENDER[]
+    classification CLASSIFICATION[]
+    subtitled Boolean
+    initial_date DateTime
+    final_date DateTime
+
+    technologies Technology[]
+}

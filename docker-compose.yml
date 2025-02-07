@@ -1,0 +1,20 @@
+services:
+  database:
+    image: postgres
+    container_name: movie-theater-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=movie-theater
+    volumes:
+      - movie-theater-data:/data/postgres
+    networks:
+      - movie-theater
+
+volumes:
+  movie-theater-data:
+
+networks:
+  movie-theater:
