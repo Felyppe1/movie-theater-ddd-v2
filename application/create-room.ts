@@ -35,7 +35,7 @@ export class CreateRoom {
         const chairTypes = await this.chairTypesRepository.getAll()
         const technologies = await this.technologiesRepository.getAll()
 
-        const existentChairTypeIds = chairTypes.map(chairType => chairType.id)
+        const existentChairTypeIds = chairTypes.map(chairType => chairType.getId())
         const existentTechnologyIds = technologies.map(technology => technology.id)
 
         for (let row = 0; row < data.layout.length; row++) {

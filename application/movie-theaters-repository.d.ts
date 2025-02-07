@@ -6,6 +6,7 @@ interface HasRoomWithNumberInput {
 }
 
 export interface MovieTheatersRepository {
+    save(movieTheater: MovieTheater): Promise<void>
     getById(id: string): Promise<MovieTheater | null>
     hasRoomWithNumber(data: HasRoomWithNumberInput): Promise<boolean>
 }
