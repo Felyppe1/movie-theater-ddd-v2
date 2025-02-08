@@ -75,6 +75,10 @@ export class Room {
         return this.number
     }
 
+    getMovieTheaterId() {
+        return this.movieTheaterId
+    }
+
     export() {
         return {
             movieTheaterId: this.movieTheaterId,

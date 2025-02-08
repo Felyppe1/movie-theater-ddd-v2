@@ -12,7 +12,18 @@ services:
       - movie-theater-data:/data/postgres
     networks:
       - movie-theater
-
+  backend:
+    build: .
+    container_name: movie-theater-backend
+    ports:
+      - 3333:3333
+      - 5555:5555
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgresql://postgres:123@database:5432/movie-theater
+    networks:
+      - movie-theater
 volumes:
   movie-theater-data:
 

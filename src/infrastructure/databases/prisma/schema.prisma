@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 enum GENDER {
@@ -19,21 +19,22 @@ enum CLASSIFICATION {
 
 }
 
-model Chair {
-    row Int
-    column Int
-    active Boolean
-    room_number Int
-    movie_theater_id String
+// model Chair {
+//     row Int
+//     column Int
+//     active Boolean
+//     room_number Int
+//     movie_theater_id String
 
-    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+//     room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
 
-    @@id([row, column, room_number, movie_theater_id])
-}
+//     @@id([row, column, room_number, movie_theater_id])
+// }
 
 model Technology {
     id Int @id @default(autoincrement())
     name String
+    percentageIncrease Float
 
     rooms RoomTechnology[]
     movies Movie[]
@@ -45,7 +46,7 @@ model Room {
 
     movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     technologies RoomTechnology[]
-    chairs Chair[]
+    chairs Json
 
     @@id([number, movie_theater_id])
 }

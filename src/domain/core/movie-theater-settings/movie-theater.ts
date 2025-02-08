@@ -92,10 +92,6 @@ export class Address {
         if (!number) {
             throw Error('The number attribute is required')
         }
-
-        if (!complement) {
-            throw Error('The complement attribute is required')
-        }
         
         if (!street) {
             throw Error('The street attribute is required')
