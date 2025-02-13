@@ -1,8 +1,8 @@
-import { CreateRoomService } from "../../../services/create-room-service";
-import { ChairTypesRepository } from "../../driving/repositories/chair-types-repository";
-import { MovieTheatersRepository } from "../../driving/repositories/movie-theaters-repository";
-import { RoomsRepository } from "../../driving/repositories/rooms-repository";
-import { TechnologiesRepository } from "../../driving/repositories/technologies-repository";
+import { ChairTypesRepository } from "../../application/interfaces/repositories/chair-types-repository";
+import { MovieTheatersRepository } from "../../application/interfaces/repositories/movie-theaters-repository";
+import { RoomsRepository } from "../../application/interfaces/repositories/rooms-repository";
+import { TechnologiesRepository } from "../../application/interfaces/repositories/technologies-repository";
+import { CreateRoomService } from "../../application/services/create-room-service";
 import { Request, Response } from "./controller";
 
 interface CreateRoomControllerInput {

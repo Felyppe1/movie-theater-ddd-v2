@@ -3,8 +3,7 @@ import { PrismaRoomsRepository } from "../../databases/prisma/prisma-rooms-repos
 import { PrismaChairTypesRepository } from "../../databases/prisma/prisma-chairs-repository";
 import { PrismaTechnologiesRepository } from "../../databases/prisma/prisma-technologies-repository";
 import { PrismaMovieTheatersRepository } from "../../databases/prisma/prisma-movie-theaters-repository";
-import { CreateRoomService } from "../../../application/services/create-room-service";
-import { CreateRoomController } from "../../../application/ports/driven/controllers/create-room-controller";
+import { CreateRoomController } from "../../../interface-adapters/controllers/create-room-controller";
 
 export const roomsRouter = Router();
 

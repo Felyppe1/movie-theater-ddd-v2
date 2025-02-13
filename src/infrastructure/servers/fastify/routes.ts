@@ -2,9 +2,8 @@ import { PrismaRoomsRepository } from "../../databases/prisma/prisma-rooms-repos
 import { PrismaChairTypesRepository } from "../../databases/prisma/prisma-chairs-repository";
 import { PrismaTechnologiesRepository } from "../../databases/prisma/prisma-technologies-repository";
 import { PrismaMovieTheatersRepository } from "../../databases/prisma/prisma-movie-theaters-repository";
-import { CreateRoomService } from "../../../application/services/create-room-service";
-import { CreateRoomController } from "../../../application/ports/driven/controllers/create-room-controller";
 import { FastifyInstance } from "fastify";
+import { CreateRoomController } from "../../../interface-adapters/controllers/create-room-controller";
 
 export async function router(fastify: FastifyInstance) {
   fastify.route({
@@ -16,14 +15,12 @@ export async function router(fastify: FastifyInstance) {
       const technologiesRepository = new PrismaTechnologiesRepository();
       const movieTheatersRepository = new PrismaMovieTheatersRepository();
 
-      const createRoomSerivce = new CreateRoomService(
+      const createRoomController = new CreateRoomController(
         roomsRepository,
         chairTypesRepository,
         technologiesRepository,
         movieTheatersRepository
       );
-
-      const createRoomController = new CreateRoomController(createRoomSerivce);
 
       const response = await createRoomController.handle({
         body: request.body as any,

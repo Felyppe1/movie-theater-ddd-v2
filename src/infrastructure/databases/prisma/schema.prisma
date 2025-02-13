@@ -19,17 +19,20 @@ enum CLASSIFICATION {
 
 }
 
-// model Chair {
-//     row Int
-//     column Int
-//     active Boolean
-//     room_number Int
-//     movie_theater_id String
+model Chair {
+    row Int
+    column Int
+    active Boolean
 
-//     room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+    room_number Int
+    movie_theater_id String
+    chair_type_id Int
 
-//     @@id([row, column, room_number, movie_theater_id])
-// }
+    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+    chairType ChairType @relation(fields: [chair_type_id], references: [id])
+
+    @@id([row, column, room_number, movie_theater_id])
+}
 
 model Technology {
     id Int @id @default(autoincrement())
@@ -46,7 +49,7 @@ model Room {
 
     movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     technologies RoomTechnology[]
-    chairs Json
+    chairs Chair[]
 
     @@id([number, movie_theater_id])
 }
@@ -80,6 +83,7 @@ model ChairType {
     name String
 
     movieTheaters MovieTheaterChairType[]
+    chairs Chair[]
 }
 
 model MovieTheaterChairType {
