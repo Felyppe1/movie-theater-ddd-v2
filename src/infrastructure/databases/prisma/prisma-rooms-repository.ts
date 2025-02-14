@@ -7,23 +7,28 @@ import { prisma } from "./prisma-client";
 
 export class PrismaRoomsRepository implements RoomsRepository {
   async save(room: Room) {
-    // let chairs = [] as {
-    //     row: number
-    //     column: number
-    //     active: boolean
-    // }[]
+    let chairs = [] as {
+        row: number
+        column: number
+        chair_type_id: number
+    }[]
 
-    // const { layout, ...data } = room.export();
+    const { layout, ...data } = room.export()
 
-    // for (let row = 0; row < layout.length; row++) {
-    //     for (let column = 0; column < layout[row].length; column++) {
-    //         chairs.push({
-    //             row,
-    //             column,
-    //             active: !!layout[row][column],
-    //         });
-    //     }
-    // }
+    for (let row = 0; row < layout.length; row++) {
+        for (let column = 0; column < layout[row].length; column++) {
+            if (!layout[row][column]) continue
+
+            chairs.push({
+                row,
+                column,
+                chair_type_id: layout[row][column]!
+            })
+        }
+    }
+
+    const row_length = layout.length
+    const column_length = layout[0].length
     // const chairs:object[] = layout.reduce((acc, row, rowIndex) => {
     //     const mappedRow = row.map((column, columnIndex) => {
     //         return {
@@ -35,15 +40,21 @@ export class PrismaRoomsRepository implements RoomsRepository {
     //     })
     //     return acc.concat(mappedRow)
     // }, [])
-    const roomExported = room.export();
+    // const roomExported = room.export();
 
     await prisma.room.create({
       data: {
-        movie_theater_id: roomExported.movieTheaterId,
-        number: roomExported.number,
-        chairs: roomExported.layout,
+        movie_theater_id: data.movieTheaterId,
+        number: data.number,
+        row_length,
+        column_length,
+        chairs: {
+            createMany: {
+                data: chairs
+            }
+        },
         technologies: {
-          create: roomExported.technologyIds.map((id) => ({
+          create: data.technologyIds.map((id) => ({
             technology: {
               connect: {
                 id,
@@ -65,10 +76,17 @@ export class PrismaRoomsRepository implements RoomsRepository {
       },
       include: {
         technologies: true,
+        chairs: true
       },
     });
 
     if (!room) return null;
+
+    let layoutCreation: Room['layout'] = Array.from({ length: room.row_length }, () => {
+        return Array.from({ length: room.column_length })
+    })
+
+    room.chairs.forEach(chair => layoutCreation[chair.row][chair.column] = chair.chair_type_id)
 
     return new Room({
       number: room.number,
@@ -76,7 +94,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
       technologyIds: room.technologies.map(
         (technology) => technology.technology_id
       ),
-      layout: room.chairs as (number | null)[][],
+      layout: layoutCreation.map(row => row.map(column => column ?? null)),
     });
   }
 }

@@ -64,7 +64,6 @@ export class CreateRoomService {
       }
     }
 
-    console.log(data.technologyIds);
     const technologyDoesNotExist = data.technologyIds.find(
       (technology) => !existentTechnologyIds.includes(technology)
     );

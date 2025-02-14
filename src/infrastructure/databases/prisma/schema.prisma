@@ -22,7 +22,6 @@ enum CLASSIFICATION {
 model Chair {
     row Int
     column Int
-    active Boolean
 
     room_number Int
     movie_theater_id String
@@ -46,6 +45,8 @@ model Technology {
 model Room {
     number Int
     movie_theater_id String
+    row_length Int
+    column_length Int
 
     movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     technologies RoomTechnology[]

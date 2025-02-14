@@ -15,23 +15,25 @@ interface CreateMovieTheaterInput {
   state: string;
 }
 
-export class CreateMovieTheater {
+export class CreateMovieTheaterService {
   constructor(
     private readonly movieTheatersRepository: MovieTheatersRepository,
     private readonly chairTypesRepository: ChairTypesRepository
   ) {}
 
   async execute({ chairs, ...data }: CreateMovieTheaterInput) {
-    const chairTypes = await this.chairTypesRepository.getAll();
-
-    const chairTypeIds = chairTypes.map((chairType) => chairType.getId());
-
-    const chairTypeDoesNotExist = chairs.find(
-      (chair) => !chairTypeIds.includes(chair.id)
-    );
-
-    if (!chairTypeDoesNotExist) {
-      throw Error(`Chair type id ${chairTypeDoesNotExist} does not exist`);
+    if (chairs.length > 0) {
+        const chairTypes = await this.chairTypesRepository.getAll();
+    
+        const chairTypeIds = chairTypes.map((chairType) => chairType.getId());
+    
+        const chairTypeDoesNotExist = chairs.find(
+          (chair) => !chairTypeIds.includes(chair.id)
+        );
+        
+        if (chairTypeDoesNotExist) {
+          throw Error(`Chair type id ${chairTypeDoesNotExist.id} does not exist`)
+        }
     }
 
     const movieTheater = MovieTheater.create({ chairs, ...data });

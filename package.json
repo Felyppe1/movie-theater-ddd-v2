@@ -14,7 +14,7 @@
     "type": "commonjs",
     "description": "",
     "prisma": {
-        "schema": "src/infrastrucutre/databases/prisma/schema.prisma"
+        "schema": "src/infrastructure/databases/prisma/schema.prisma"
     },
     "devDependencies": {
         "@types/express": "^5.0.0",

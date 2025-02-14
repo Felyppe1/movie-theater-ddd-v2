@@ -62,6 +62,13 @@ export class MovieTheater {
     getId() {
         return this.id
     }
+
+    // export() {
+    //     return {
+    //         id: this.id,
+    //         a
+    //     }
+    // }
 }
 
 interface AddressInput {
