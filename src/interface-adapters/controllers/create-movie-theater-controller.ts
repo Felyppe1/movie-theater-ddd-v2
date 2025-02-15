@@ -4,10 +4,6 @@ import { CreateMovieTheaterService } from "../../application/services/create-mov
 import { Request, Response } from "./controller";
 
 interface CreateMovieTheaterInput {
-    chairs: {
-      id: number;
-      value: number;
-    }[];
     number: string;
     complement?: string;
     zipCode: string;
@@ -17,17 +13,13 @@ interface CreateMovieTheaterInput {
 }
 
 export class CreateMovieTheaterController {
-    constructor(
-        private readonly movieTheatersRepository: MovieTheatersRepository,
-        private readonly chairTypesRepository: ChairTypesRepository
-    ) {}
+    constructor(private readonly movieTheatersRepository: MovieTheatersRepository) {}
 
     async handle(request: Request<CreateMovieTheaterInput>): Promise<Response<string>> {
         const { body } = request
 
         const createMovieTheaterService = new CreateMovieTheaterService(
             this.movieTheatersRepository,
-            this.chairTypesRepository
         )
 
         const movieTheaterId = await createMovieTheaterService.execute(body)
