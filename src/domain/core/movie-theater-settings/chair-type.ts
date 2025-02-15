@@ -1,5 +1,5 @@
 export interface ChairTypeInput {
-    id: number,
+    id: number
     name: string
 }
 
@@ -7,10 +7,7 @@ export class ChairType {
     private id: number
     private name: string
 
-    constructor({
-        id,
-        name
-    }: ChairTypeInput) {
+    constructor({ id, name }: ChairTypeInput) {
         if (!id) {
             throw Error('The id attribute is required')
         }

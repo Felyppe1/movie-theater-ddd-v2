@@ -28,16 +28,11 @@ export class Room {
             movieTheaterId,
             number,
             layout,
-            technologyIds
+            technologyIds,
         })
     }
 
-    constructor({
-        movieTheaterId,
-        number,
-        layout,
-        technologyIds
-    }: RoomInput) {
+    constructor({ movieTheaterId, number, layout, technologyIds }: RoomInput) {
         if (!movieTheaterId) {
             throw Error('The room movieTheaterId field is required')
         }
@@ -50,18 +45,22 @@ export class Room {
             throw Error('The room technologyIds field is required')
         }
 
-        const hasAtLeastOneChair = layout.some(row => row.some(column => typeof column === 'number'))
+        const hasAtLeastOneChair = layout.some(row =>
+            row.some(column => typeof column === 'number'),
+        )
         if (!layout || layout.length === 0 || !hasAtLeastOneChair) {
             throw Error('The room layout field is required')
         }
-        
+
         const firstLineLength = layout[0].length
 
         for (let nthLine = 1; nthLine < layout.length; nthLine++) {
             const nthLineLength = layout[nthLine].length
 
             if (nthLineLength !== firstLineLength) {
-                throw Error(`The length of line ${nthLine + 1} is not equal to the length of the first line`)
+                throw Error(
+                    `The length of line ${nthLine + 1} is not equal to the length of the first line`,
+                )
             }
         }
 

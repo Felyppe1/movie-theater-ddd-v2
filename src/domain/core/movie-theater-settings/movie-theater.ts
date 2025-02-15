@@ -26,14 +26,11 @@ export class MovieTheater {
     static create(data: CreateMovieTheaterInput) {
         return new MovieTheater({
             id: randomUUID(),
-            ...data
+            ...data,
         })
     }
 
-    constructor({
-        id,
-        ...address
-    }: MovieTheaterInput) {
+    constructor({ id, ...address }: MovieTheaterInput) {
         if (!id) {
             throw Error('The id attribute is required')
         }
@@ -46,12 +43,12 @@ export class MovieTheater {
         return this.id
     }
 
-    // export() {
-    //     return {
-    //         id: this.id,
-    //         a
-    //     }
-    // }
+    export() {
+        return {
+            id: this.id,
+            ...this.address.export(),
+        }
+    }
 }
 
 interface AddressInput {
@@ -82,15 +79,15 @@ export class Address {
         if (!number) {
             throw Error('The number attribute is required')
         }
-        
+
         if (!street) {
             throw Error('The street attribute is required')
         }
-        
+
         if (!city) {
             throw Error('The city attribute is required')
         }
-        
+
         if (!state) {
             throw Error('The state attribute is required')
         }
@@ -101,5 +98,16 @@ export class Address {
         this.street = street
         this.city = city
         this.state = state
+    }
+
+    export() {
+        return {
+            number: this.number,
+            complement: this.complement,
+            zipCode: this.zipCode,
+            street: this.street,
+            city: this.city,
+            state: this.state,
+        }
     }
 }
