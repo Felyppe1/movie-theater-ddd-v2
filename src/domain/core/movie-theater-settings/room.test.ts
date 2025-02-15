@@ -37,7 +37,6 @@ describe('Room', () => {
         it('has no rows', () => {
             expect(() =>
                 new Room({
-                    id: '1',
                     movieTheaterId: '1',
                     number: 1,
                     technologyIds: [1],
@@ -49,7 +48,6 @@ describe('Room', () => {
         it('has no columnn', () => {
             expect(() =>
                 new Room({
-                    id: '1',
                     movieTheaterId: '1',
                     number: 1,
                     technologyIds: [1],
@@ -61,7 +59,6 @@ describe('Room', () => {
         it('has only null columns', () => {
             expect(() =>
                 new Room({
-                    id: '1',
                     movieTheaterId: '1',
                     number: 1,
                     technologyIds: [1],
@@ -73,7 +70,6 @@ describe('Room', () => {
         it('has rows with different lengths', () =>{
             expect(() => 
                 new Room({
-                    id: '1',
                     movieTheaterId: '1',
                     number: 1,
                     technologyIds: [1],

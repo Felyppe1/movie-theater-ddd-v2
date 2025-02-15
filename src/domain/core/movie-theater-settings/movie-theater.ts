@@ -1,10 +1,6 @@
 import { randomUUID } from 'crypto'
 
 interface CreateMovieTheaterInput {
-    chairs: {
-        id: number
-        value: number
-    }[]
     number: string
     complement?: string
     zipCode: string
@@ -15,7 +11,6 @@ interface CreateMovieTheaterInput {
 
 export interface MovieTheaterInput {
     id: string
-    chairs: Map<number, number>
     number: string
     complement?: string
     zipCode: string
@@ -26,36 +21,24 @@ export interface MovieTheaterInput {
 
 export class MovieTheater {
     private id: string
-    private chairs: Map<number, number>
     private address: Address
 
-    static create({ chairs, ...data }: CreateMovieTheaterInput) {
-        const chairsMap = new Map()
-        
-        chairs.forEach(chair => chairsMap.set(chair.id, chair.value))
-
+    static create(data: CreateMovieTheaterInput) {
         return new MovieTheater({
             id: randomUUID(),
-            chairs: chairsMap,
             ...data
         })
     }
 
     constructor({
         id,
-        chairs,
         ...address
     }: MovieTheaterInput) {
         if (!id) {
             throw Error('The id attribute is required')
         }
 
-        if (!chairs) {
-            throw Error('The chairs attribute is required')
-        }
-
         this.id = id
-        this.chairs = chairs
         this.address = new Address(address)
     }
 
