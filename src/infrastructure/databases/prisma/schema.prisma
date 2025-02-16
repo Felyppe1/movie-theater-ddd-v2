@@ -34,9 +34,9 @@ model Chair {
 }
 
 model Technology {
-    id Int @id @default(autoincrement())
+    id String @id @default(uuid())
     name String
-    percentageIncrease Float
+    percentageIncrease Float?
 
     rooms RoomTechnology[]
     movies Movie[]
@@ -56,7 +56,7 @@ model Room {
 }
 
 model RoomTechnology {
-    technology_id Int
+    technology_id String
     room_number Int
     movie_theater_id String
 
