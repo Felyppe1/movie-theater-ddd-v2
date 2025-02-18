@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
 import { CreateTechnologyController } from '../../../interface-adapters/controllers/create-technology-controller'
+import { ExpressResponseAdapter } from './express-response-adapter'
 
 export const technologiesRouter = Router()
 
@@ -11,9 +12,12 @@ technologiesRouter.post('/', async (req, res) => {
         technologiesRepository,
     )
 
-    const response = await createTechnologyController.handle({
-        body: req.body,
-    })
+    const expressResponseAdapter = new ExpressResponseAdapter(res)
 
-    res.status(response.status).json(response.body)
+    await createTechnologyController.handle(
+        {
+            body: req.body,
+        },
+        expressResponseAdapter,
+    )
 })

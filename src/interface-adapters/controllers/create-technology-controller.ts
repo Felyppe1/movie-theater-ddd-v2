@@ -2,14 +2,23 @@ import { TechnologiesRepository } from '../../application/interfaces/repositorie
 import { CreateTechnologyService } from '../../application/services/create-technology-service'
 import { Request, Response } from './controller'
 
+export interface CreateTechnologyControllerInput {
+    name: string
+}
+
+export interface CreateTechnologyControllerOutput {
+    technologyId: string
+}
+
 export class CreateTechnologyController {
     constructor(
         private readonly technologiesRepository: TechnologiesRepository,
     ) {}
 
     async handle(
-        request: Request<{ name: string }>,
-    ): Promise<Response<string>> {
+        request: Request<CreateTechnologyControllerInput>,
+        response: Response<CreateTechnologyControllerOutput>,
+    ) {
         const createTechnologyService = new CreateTechnologyService(
             this.technologiesRepository,
         )
@@ -18,6 +27,6 @@ export class CreateTechnologyController {
 
         const technologyId = await createTechnologyService.execute(body.name)
 
-        return { status: 201, body: technologyId }
+        response.status(201).body({ technologyId }).send()
     }
 }

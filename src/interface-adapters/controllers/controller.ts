@@ -6,6 +6,20 @@ export interface Request<T = undefined> {
 }
 
 export interface Response<T = undefined> {
-    status: number
-    body?: T
+    status(number: number): this
+    body(data: T): this
+    cookie(name: string, value: string, data: Cookie): this
+    send(): this
+}
+
+export interface Cookie {
+    sameSite?: boolean | 'lax' | 'strict' | 'none'
+    httpOnly?: boolean
+    secure?: boolean
+    expires?: Date
+    domain?: string
+}
+
+export interface Controller<T = undefined, Y = undefined> {
+    handle(request: Request<T>, response: Response<Y>): Promise<void>
 }

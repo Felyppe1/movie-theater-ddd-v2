@@ -2,19 +2,23 @@ import { PrismaRoomsRepository } from '../../databases/prisma/prisma-rooms-repos
 import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chairs-repository'
 import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
-import { FastifyInstance, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import {
     CreateRoomController,
     CreateRoomControllerInput,
 } from '../../../interface-adapters/controllers/create-room-controller'
+import fastifyCookie from 'fastify-cookie'
+import { FastifyResponseAdapter } from './fastify-response-adapter'
 
 export async function router(fastify: FastifyInstance) {
+    fastify.register(fastifyCookie)
+
     fastify.route({
-        method: 'GET',
-        url: '/',
+        method: 'POST',
+        url: '/rooms',
         handler: async (
             request: FastifyRequest<{ Body: CreateRoomControllerInput }>,
-            reply,
+            reply: FastifyReply,
         ) => {
             const roomsRepository = new PrismaRoomsRepository()
             const chairTypesRepository = new PrismaChairTypesRepository()
@@ -28,11 +32,14 @@ export async function router(fastify: FastifyInstance) {
                 movieTheatersRepository,
             )
 
-            const response = await createRoomController.handle({
-                body: request.body,
-            })
+            const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
-            return reply.status(response.status).send()
+            await createRoomController.handle(
+                {
+                    body: request.body,
+                },
+                fastifyResponseAdapter,
+            )
         },
     })
 }

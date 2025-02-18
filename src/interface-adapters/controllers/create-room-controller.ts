@@ -3,7 +3,7 @@ import { MovieTheatersRepository } from '../../application/interfaces/repositori
 import { RoomsRepository } from '../../application/interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../application/interfaces/repositories/technologies-repository'
 import { CreateRoomService } from '../../application/services/create-room-service'
-import { Request, Response } from './controller'
+import { Controller, Request, Response } from './controller'
 
 export interface CreateRoomControllerInput {
     movieTheaterId: string
@@ -12,7 +12,9 @@ export interface CreateRoomControllerInput {
     technologyIds: string[]
 }
 
-export class CreateRoomController {
+export class CreateRoomController
+    implements Controller<CreateRoomControllerInput>
+{
     constructor(
         private readonly roomsRepository: RoomsRepository,
         private readonly chairTypesRepository: ChairTypesRepository,
@@ -22,7 +24,8 @@ export class CreateRoomController {
 
     async handle(
         request: Request<CreateRoomControllerInput>,
-    ): Promise<Response> {
+        response: Response,
+    ) {
         const createRoomService = new CreateRoomService(
             this.roomsRepository,
             this.chairTypesRepository,
@@ -34,6 +37,6 @@ export class CreateRoomController {
 
         await createRoomService.execute(body)
 
-        return { status: 200 }
+        response.status(201).send()
     }
 }

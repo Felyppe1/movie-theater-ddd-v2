@@ -11,6 +11,10 @@ export interface CreateMovieTheaterControllerInput {
     state: string
 }
 
+export interface CreateMovieTheaterControllerOutput {
+    movieTheaterId: string
+}
+
 export class CreateMovieTheaterController {
     constructor(
         private readonly movieTheatersRepository: MovieTheatersRepository,
@@ -18,7 +22,8 @@ export class CreateMovieTheaterController {
 
     async handle(
         request: Request<CreateMovieTheaterControllerInput>,
-    ): Promise<Response<string>> {
+        response: Response<CreateMovieTheaterControllerOutput>,
+    ) {
         const { body } = request
 
         const createMovieTheaterService = new CreateMovieTheaterService(
@@ -27,6 +32,6 @@ export class CreateMovieTheaterController {
 
         const movieTheaterId = await createMovieTheaterService.execute(body)
 
-        return { status: 201, body: movieTheaterId }
+        response.status(201).body({ movieTheaterId }).send()
     }
 }

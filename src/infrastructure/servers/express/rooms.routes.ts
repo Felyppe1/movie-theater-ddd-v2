@@ -4,6 +4,7 @@ import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chairs
 import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
 import { CreateRoomController } from '../../../interface-adapters/controllers/create-room-controller'
+import { ExpressResponseAdapter } from './express-response-adapter'
 
 export const roomsRouter = Router()
 
@@ -20,9 +21,12 @@ roomsRouter.post('/', async (req, res) => {
         movieTheatersRepository,
     )
 
-    const response = await createRoomController.handle({
-        body: req.body,
-    })
+    const expressResponseAdapter = new ExpressResponseAdapter(res)
 
-    res.status(response.status).json(response.body)
+    await createRoomController.handle(
+        {
+            body: req.body,
+        },
+        expressResponseAdapter,
+    )
 })

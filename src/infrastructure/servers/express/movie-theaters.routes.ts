@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
 import { CreateMovieTheaterController } from '../../../interface-adapters/controllers/create-movie-theater-controller'
+import { ExpressResponseAdapter } from './express-response-adapter'
 
 export const movieTheatersRoutes = Router()
 
@@ -11,9 +12,12 @@ movieTheatersRoutes.post('/', async (req, res) => {
         movieTheatersRepository,
     )
 
-    const response = await createMovieTheaterController.handle({
-        body: req.body,
-    })
+    const expressResponseAdapter = new ExpressResponseAdapter(res)
 
-    res.status(response.status).json(response.body)
+    await createMovieTheaterController.handle(
+        {
+            body: req.body,
+        },
+        expressResponseAdapter,
+    )
 })
