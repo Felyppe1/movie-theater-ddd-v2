@@ -6,7 +6,7 @@ describe('Room', () => {
         Room.create({
             movieTheaterId: '1',
             number: 1,
-            technologyIds: [1],
+            technologyIds: ['1'],
             layout: [[1]],
         })
     })
@@ -40,7 +40,7 @@ describe('Room', () => {
                     new Room({
                         movieTheaterId: '1',
                         number: 1,
-                        technologyIds: [1],
+                        technologyIds: ['1'],
                         layout: [],
                     }),
             ).toThrow('The room layout field is required')
@@ -52,7 +52,7 @@ describe('Room', () => {
                     new Room({
                         movieTheaterId: '1',
                         number: 1,
-                        technologyIds: [1],
+                        technologyIds: ['1'],
                         layout: [[]],
                     }),
             ).toThrow('The room layout field is required')
@@ -64,7 +64,7 @@ describe('Room', () => {
                     new Room({
                         movieTheaterId: '1',
                         number: 1,
-                        technologyIds: [1],
+                        technologyIds: ['1'],
                         layout: [[null]],
                     }),
             ).toThrow('The room layout field is required')
@@ -76,7 +76,7 @@ describe('Room', () => {
                     new Room({
                         movieTheaterId: '1',
                         number: 1,
-                        technologyIds: [1],
+                        technologyIds: ['1'],
                         layout: [[1], [1, 1]],
                     }),
             ).toThrow(

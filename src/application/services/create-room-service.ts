@@ -8,7 +8,7 @@ interface CreateRoomInput {
     movieTheaterId: string
     number: number
     layout: number[][]
-    technologyIds: number[]
+    technologyIds: string[]
 }
 
 export class CreateRoomService {
@@ -48,8 +48,8 @@ export class CreateRoomService {
         const existentChairTypeIds = chairTypes.map(chairType =>
             chairType.getId(),
         )
-        const existentTechnologyIds = technologies.map(
-            technology => technology.id,
+        const existentTechnologyIds = technologies.map(technology =>
+            technology.getId(),
         )
 
         for (let row = 0; row < data.layout.length; row++) {

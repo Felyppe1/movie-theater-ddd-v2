@@ -2,21 +2,21 @@ interface RoomInput {
     movieTheaterId: string
     number: number
     layout: (number | null)[][]
-    technologyIds: number[]
+    technologyIds: string[]
 }
 
 interface CreateRoomInput {
     movieTheaterId: string
     number: number
     layout: (number | null)[][]
-    technologyIds: number[]
+    technologyIds: string[]
 }
 
 export class Room {
     private movieTheaterId: string
     private number: number
     private layout: (number | null)[][]
-    private technologyIds: number[]
+    private technologyIds: string[]
 
     static create({
         movieTheaterId,

@@ -9,7 +9,7 @@ export interface CreateRoomControllerInput {
     movieTheaterId: string
     number: number
     layout: number[][]
-    technologyIds: number[]
+    technologyIds: string[]
 }
 
 export class CreateRoomController {
