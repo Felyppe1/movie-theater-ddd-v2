@@ -8,17 +8,18 @@ CREATE TYPE "CLASSIFICATION" AS ENUM ('FREE', '12');
 CREATE TABLE "Chair" (
     "row" INTEGER NOT NULL,
     "column" INTEGER NOT NULL,
-    "active" BOOLEAN NOT NULL,
     "room_number" INTEGER NOT NULL,
     "movie_theater_id" TEXT NOT NULL,
+    "chair_type_id" INTEGER NOT NULL,
 
     CONSTRAINT "Chair_pkey" PRIMARY KEY ("row","column","room_number","movie_theater_id")
 );
 
 -- CreateTable
 CREATE TABLE "Technology" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "percentageIncrease" DOUBLE PRECISION,
 
     CONSTRAINT "Technology_pkey" PRIMARY KEY ("id")
 );
@@ -27,13 +28,15 @@ CREATE TABLE "Technology" (
 CREATE TABLE "Room" (
     "number" INTEGER NOT NULL,
     "movie_theater_id" TEXT NOT NULL,
+    "row_length" INTEGER NOT NULL,
+    "column_length" INTEGER NOT NULL,
 
     CONSTRAINT "Room_pkey" PRIMARY KEY ("number","movie_theater_id")
 );
 
 -- CreateTable
 CREATE TABLE "RoomTechnology" (
-    "technology_id" INTEGER NOT NULL,
+    "technology_id" TEXT NOT NULL,
     "room_number" INTEGER NOT NULL,
     "movie_theater_id" TEXT NOT NULL,
 
@@ -85,38 +88,3 @@ CREATE TABLE "Movie" (
 
     CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
 );
-
--- CreateTable
-CREATE TABLE "_MovieToTechnology" (
-    "A" TEXT NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_MovieToTechnology_AB_pkey" PRIMARY KEY ("A","B")
-);
-
--- CreateIndex
-CREATE INDEX "_MovieToTechnology_B_index" ON "_MovieToTechnology"("B");
-
--- AddForeignKey
-ALTER TABLE "Chair" ADD CONSTRAINT "Chair_room_number_movie_theater_id_fkey" FOREIGN KEY ("room_number", "movie_theater_id") REFERENCES "Room"("number", "movie_theater_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Room" ADD CONSTRAINT "Room_movie_theater_id_fkey" FOREIGN KEY ("movie_theater_id") REFERENCES "MovieTheater"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "RoomTechnology" ADD CONSTRAINT "RoomTechnology_technology_id_fkey" FOREIGN KEY ("technology_id") REFERENCES "Technology"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "RoomTechnology" ADD CONSTRAINT "RoomTechnology_room_number_movie_theater_id_fkey" FOREIGN KEY ("room_number", "movie_theater_id") REFERENCES "Room"("number", "movie_theater_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MovieTheaterChairType" ADD CONSTRAINT "MovieTheaterChairType_chair_type_id_fkey" FOREIGN KEY ("chair_type_id") REFERENCES "ChairType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MovieTheaterChairType" ADD CONSTRAINT "MovieTheaterChairType_movie_theater_id_fkey" FOREIGN KEY ("movie_theater_id") REFERENCES "MovieTheater"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_MovieToTechnology" ADD CONSTRAINT "_MovieToTechnology_A_fkey" FOREIGN KEY ("A") REFERENCES "Movie"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_MovieToTechnology" ADD CONSTRAINT "_MovieToTechnology_B_fkey" FOREIGN KEY ("B") REFERENCES "Technology"("id") ON DELETE CASCADE ON UPDATE CASCADE;

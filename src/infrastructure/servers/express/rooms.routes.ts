@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { PrismaRoomsRepository } from '../../databases/prisma/prisma-rooms-repository'
-import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chairs-repository'
+import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chair-types-repository'
 import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
 import { CreateRoomController } from '../../../interface-adapters/controllers/create-room-controller'

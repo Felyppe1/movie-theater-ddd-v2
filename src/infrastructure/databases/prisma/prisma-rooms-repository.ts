@@ -1,5 +1,6 @@
 import {
     GetOneInput,
+    NumberExistsInTheater,
     RoomsRepository,
 } from '../../../application/interfaces/repositories/rooms-repository'
 import { Room } from '../../../domain/core/movie-theater-settings/room'
@@ -11,6 +12,8 @@ export class PrismaRoomsRepository implements RoomsRepository {
             row: number
             column: number
             chair_type_id: number
+            movie_theater_id: string
+            room_number: number
         }[]
 
         const { layout, ...data } = room.export()
@@ -23,47 +26,37 @@ export class PrismaRoomsRepository implements RoomsRepository {
                     row,
                     column,
                     chair_type_id: layout[row][column]!,
+                    movie_theater_id: data.movieTheaterId,
+                    room_number: data.number,
                 })
             }
         }
 
         const row_length = layout.length
         const column_length = layout[0].length
-        // const chairs:object[] = layout.reduce((acc, row, rowIndex) => {
-        //     const mappedRow = row.map((column, columnIndex) => {
-        //         return {
-        //             row: rowIndex,
-        //             column: columnIndex,
-        //             active: !!column,
-        //             room_id: data.id,
-        //         }
-        //     })
-        //     return acc.concat(mappedRow)
-        // }, [])
-        // const roomExported = room.export();
 
-        await prisma.room.create({
-            data: {
-                movie_theater_id: data.movieTheaterId,
-                number: data.number,
-                row_length,
-                column_length,
-                chairs: {
-                    createMany: {
-                        data: chairs,
-                    },
+        await prisma.$transaction([
+            prisma.room.create({
+                data: {
+                    movie_theater_id: data.movieTheaterId,
+                    number: data.number,
+                    row_length,
+                    column_length,
                 },
-                technologies: {
-                    create: data.technologyIds.map(id => ({
-                        technology: {
-                            connect: {
-                                id,
-                            },
-                        },
-                    })),
-                },
-            },
-        })
+            }),
+
+            prisma.chair.createMany({
+                data: chairs,
+            }),
+
+            prisma.roomTechnology.createMany({
+                data: data.technologyIds.map(technologyId => ({
+                    technology_id: technologyId,
+                    movie_theater_id: data.movieTheaterId,
+                    room_number: data.number,
+                })),
+            }),
+        ])
     }
 
     async getOne({
@@ -77,10 +70,6 @@ export class PrismaRoomsRepository implements RoomsRepository {
                     movie_theater_id: movieTheaterId,
                 },
             },
-            include: {
-                technologies: true,
-                chairs: true,
-            },
         })
 
         if (!room) return null
@@ -92,20 +81,45 @@ export class PrismaRoomsRepository implements RoomsRepository {
             },
         )
 
-        room.chairs.forEach(
+        const chairs = await prisma.chair.findMany({
+            where: {
+                room_number: number,
+                movie_theater_id: movieTheaterId,
+            },
+        })
+
+        chairs.forEach(
             chair =>
                 (layoutCreation[chair.row][chair.column] = chair.chair_type_id),
         )
 
+        const technologies = await prisma.roomTechnology.findMany({
+            where: {
+                room_number: number,
+                movie_theater_id: movieTheaterId,
+            },
+        })
+
         return new Room({
             number: room.number,
             movieTheaterId: room.movie_theater_id,
-            technologyIds: room.technologies.map(
+            technologyIds: technologies.map(
                 technology => technology.technology_id,
             ),
             layout: layoutCreation.map(row =>
                 row.map(column => column ?? null),
             ),
         })
+    }
+
+    async numberExistsInTheater(data: NumberExistsInTheater): Promise<boolean> {
+        const room = await prisma.room.findFirst({
+            where: {
+                number: data.number,
+                movie_theater_id: data.movieTheaterId,
+            },
+        })
+
+        return room ? true : false
     }
 }

@@ -1,7 +1,4 @@
-import {
-    HasRoomWithNumberInput,
-    MovieTheatersRepository,
-} from '../../../application/interfaces/repositories/movie-theaters-repository'
+import { MovieTheatersRepository } from '../../../application/interfaces/repositories/movie-theaters-repository'
 import { MovieTheater } from '../../../domain/core/movie-theater-settings/movie-theater'
 import { prisma } from './prisma-client'
 
@@ -23,19 +20,5 @@ export class PrismaMovieTheatersRepository implements MovieTheatersRepository {
             ...movieTheater,
             complement: movieTheater.complement ?? undefined,
         })
-    }
-
-    async hasRoomWithNumber({
-        id,
-        roomNumber,
-    }: HasRoomWithNumberInput): Promise<boolean> {
-        const movieTheater = await prisma.movieTheater.findUnique({
-            where: { id },
-            include: {
-                rooms: true,
-            },
-        })
-
-        return movieTheater!.rooms.some(room => room.number === roomNumber)
     }
 }

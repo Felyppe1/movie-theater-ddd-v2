@@ -30,13 +30,13 @@ export class CreateRoomService {
             )
         }
 
-        const hasRoomWithNumber =
-            await this.movieTheatersRepository.hasRoomWithNumber({
-                id: data.movieTheaterId,
-                roomNumber: data.number,
+        const roomNumberExistsInTheater =
+            await this.roomsRepository.numberExistsInTheater({
+                movieTheaterId: data.movieTheaterId,
+                number: data.number,
             })
 
-        if (hasRoomWithNumber) {
+        if (roomNumberExistsInTheater) {
             throw Error(
                 `Movie theater already has a room with number ${data.number}`,
             )

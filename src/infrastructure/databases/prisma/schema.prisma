@@ -27,8 +27,8 @@ model Chair {
     movie_theater_id String
     chair_type_id Int
 
-    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
-    chairType ChairType @relation(fields: [chair_type_id], references: [id])
+    // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+    // chairType ChairType @relation(fields: [chair_type_id], references: [id])
 
     @@id([row, column, room_number, movie_theater_id])
 }
@@ -38,8 +38,8 @@ model Technology {
     name String
     percentageIncrease Float?
 
-    rooms RoomTechnology[]
-    movies Movie[]
+    // rooms RoomTechnology[]
+    // movies Movie[]
 }
 
 model Room {
@@ -48,9 +48,9 @@ model Room {
     row_length Int
     column_length Int
 
-    movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
-    technologies RoomTechnology[]
-    chairs Chair[]
+    // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
+    // technologies RoomTechnology[]
+    // chairs Chair[]
 
     @@id([number, movie_theater_id])
 }
@@ -60,8 +60,8 @@ model RoomTechnology {
     room_number Int
     movie_theater_id String
 
-    technology Technology @relation(fields: [technology_id], references: [id])
-    room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
+    // technology Technology @relation(fields: [technology_id], references: [id])
+    // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
 
     @@id([technology_id, room_number, movie_theater_id])
 }
@@ -75,16 +75,16 @@ model MovieTheater {
     city String
     state String
 
-    chairTypes MovieTheaterChairType[]
-    rooms Room[]
+    // chairTypes MovieTheaterChairType[]
+    // rooms Room[]
 }
 
 model ChairType {
     id Int @id @default(autoincrement())
     name String
 
-    movieTheaters MovieTheaterChairType[]
-    chairs Chair[]
+    // movieTheaters MovieTheaterChairType[]
+    // chairs Chair[]
 }
 
 model MovieTheaterChairType {
@@ -92,8 +92,8 @@ model MovieTheaterChairType {
     movie_theater_id String
     value Float?
 
-    chairType ChairType @relation(fields: [chair_type_id], references: [id])
-    movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
+    // chairType ChairType @relation(fields: [chair_type_id], references: [id])
+    // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     
     @@id([chair_type_id, movie_theater_id])
 }
@@ -110,5 +110,6 @@ model Movie {
     initial_date DateTime
     final_date DateTime
 
-    technologies Technology[]
+    // technologies Technology[]
 }
+
