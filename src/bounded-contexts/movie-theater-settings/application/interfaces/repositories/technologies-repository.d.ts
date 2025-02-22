@@ -1,4 +1,4 @@
-import { Technology } from '../../../domain/core/movie-theater-settings/technology'
+import { Technology } from '../../../domain/core/technology'
 
 export interface TechnologiesRepository {
     getAll(): Promise<Technology[]>

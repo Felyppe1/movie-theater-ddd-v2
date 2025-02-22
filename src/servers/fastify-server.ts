@@ -1,16 +1,18 @@
 import Fastify, { FastifyInstance } from 'fastify'
-import { router } from './routes'
+import { Server } from '..'
+import { movieTheaterSettingsRoutes } from '../bounded-contexts/movie-theater-settings/infrastructure/servers/fastify'
 
-export class FastifyServer {
+export class FastifyServer implements Server {
     private app: FastifyInstance
 
     constructor() {
         this.app = Fastify()
 
-        this.app.register(router)
+        movieTheaterSettingsRoutes(this.app)
+        // this.app.register(movieTheaterSettingsRoutes)
     }
 
-    async startServer(port: number): Promise<void> {
+    async start(port: number): Promise<void> {
         try {
             await this.app.listen({ port, host: '0.0.0.0' })
 

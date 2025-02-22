@@ -1,18 +1,19 @@
 import 'dotenv/config'
 import express, { Express } from 'express'
-import { router } from './routes'
+import { Server } from '..'
+import { movieTheaterSettingsRoutes } from '../bounded-contexts/movie-theater-settings/infrastructure/servers/express'
 
-export class ExpressServer {
+export class ExpressServer implements Server {
     private app: Express
 
     constructor() {
         this.app = express()
 
         this.app.use(express.json())
-        this.app.use(router)
+        this.app.use(movieTheaterSettingsRoutes)
     }
 
-    async startServer(port: number): Promise<void> {
+    start(port: number) {
         try {
             this.app.listen(port, () =>
                 console.log(

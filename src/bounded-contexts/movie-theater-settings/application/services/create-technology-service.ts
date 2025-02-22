@@ -1,4 +1,4 @@
-import { Technology } from '../../domain/core/movie-theater-settings/technology'
+import { Technology } from '../../domain/core/technology'
 import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
 
 export class CreateTechnologyService {

@@ -2,7 +2,7 @@ import {
     HasRoomWithNumberInput,
     MovieTheatersRepository,
 } from '../../../application/interfaces/repositories/movie-theaters-repository'
-import { MovieTheater } from '../../../domain/core/movie-theater-settings/movie-theater'
+import { MovieTheater } from '../../../domain/core/movie-theater'
 import { prisma } from './prisma-client'
 
 export class PrismaMovieTheatersRepository implements MovieTheatersRepository {

@@ -2,7 +2,7 @@ import {
     GetOneInput,
     RoomsRepository,
 } from '../../../application/interfaces/repositories/rooms-repository'
-import { Room } from '../../../domain/core/movie-theater-settings/room'
+import { Room } from '../../../domain/core/room'
 import { prisma } from './prisma-client'
 
 export class PrismaRoomsRepository implements RoomsRepository {

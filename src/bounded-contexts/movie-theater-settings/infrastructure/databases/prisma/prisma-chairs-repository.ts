@@ -1,5 +1,5 @@
 import { ChairTypesRepository } from '../../../application/interfaces/repositories/chair-types-repository'
-import { ChairType } from '../../../domain/core/movie-theater-settings/chair-type'
+import { ChairType } from '../../../domain/core/chair-type'
 import { prisma } from './prisma-client'
 
 export class PrismaChairTypesRepository implements ChairTypesRepository {

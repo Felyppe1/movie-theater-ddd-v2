@@ -1,4 +1,4 @@
-import { MovieTheater } from '../../../domain/core/movie-theater-settings/movie-theater'
+import { MovieTheater } from '../../../domain/core/movie-theater'
 
 interface HasRoomWithNumberInput {
     id: string

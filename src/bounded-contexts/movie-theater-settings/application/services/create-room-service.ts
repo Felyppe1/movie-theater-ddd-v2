@@ -1,4 +1,4 @@
-import { Room } from '../../domain/core/movie-theater-settings/room'
+import { Room } from '../../domain/core/room'
 import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
 import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'

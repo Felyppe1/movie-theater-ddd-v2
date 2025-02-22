@@ -1,5 +1,5 @@
 import { TechnologiesRepository } from '../../../application/interfaces/repositories/technologies-repository'
-import { Technology } from '../../../domain/core/movie-theater-settings/technology'
+import { Technology } from '../../../domain/core/technology'
 import { prisma } from './prisma-client'
 
 export class PrismaTechnologiesRepository implements TechnologiesRepository {

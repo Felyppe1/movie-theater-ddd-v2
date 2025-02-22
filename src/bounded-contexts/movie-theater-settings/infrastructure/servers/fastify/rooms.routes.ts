@@ -10,12 +10,12 @@ import {
 import fastifyCookie from 'fastify-cookie'
 import { FastifyResponseAdapter } from './fastify-response-adapter'
 
-export async function router(fastify: FastifyInstance) {
+export async function roomsRoutes(fastify: FastifyInstance) {
     fastify.register(fastifyCookie)
 
     fastify.route({
         method: 'POST',
-        url: '/rooms',
+        url: '/',
         handler: async (
             request: FastifyRequest<{ Body: CreateRoomControllerInput }>,
             reply: FastifyReply,
