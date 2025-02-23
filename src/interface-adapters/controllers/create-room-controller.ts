@@ -12,9 +12,7 @@ export interface CreateRoomControllerInput {
     technologyIds: string[]
 }
 
-export class CreateRoomController
-    implements Controller<CreateRoomControllerInput>
-{
+export class CreateRoomController implements Controller {
     constructor(
         private readonly roomsRepository: RoomsRepository,
         private readonly chairTypesRepository: ChairTypesRepository,
@@ -35,7 +33,7 @@ export class CreateRoomController
 
         const { body } = request
 
-        await createRoomService.execute(body)
+        await createRoomService.execute(body!)
 
         response.status(201).send()
     }

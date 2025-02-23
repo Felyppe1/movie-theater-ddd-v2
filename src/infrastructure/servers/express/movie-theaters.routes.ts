@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
 import { CreateMovieTheaterController } from '../../../interface-adapters/controllers/create-movie-theater-controller'
 import { ExpressResponseAdapter } from './express-response-adapter'
+import { GetMovieTheatersController } from '../../../interface-adapters/controllers/get-movie-theaters-controller'
 
 export const movieTheatersRoutes = Router()
 
@@ -20,4 +21,16 @@ movieTheatersRoutes.post('/', async (req, res) => {
         },
         expressResponseAdapter,
     )
+})
+
+movieTheatersRoutes.get('/', async (req, res) => {
+    const movieTheatersRepository = new PrismaMovieTheatersRepository()
+
+    const getMovieTheatersController = new GetMovieTheatersController(
+        movieTheatersRepository,
+    )
+
+    const expressResponseAdapter = new ExpressResponseAdapter(res)
+
+    await getMovieTheatersController.handle({}, expressResponseAdapter)
 })

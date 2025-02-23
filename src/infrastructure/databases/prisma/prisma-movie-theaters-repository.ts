@@ -21,4 +21,16 @@ export class PrismaMovieTheatersRepository implements MovieTheatersRepository {
             complement: movieTheater.complement ?? undefined,
         })
     }
+
+    async getMany(): Promise<MovieTheater[]> {
+        const movieTheaters = await prisma.movieTheater.findMany()
+
+        return movieTheaters.map(
+            movieTheater =>
+                new MovieTheater({
+                    ...movieTheater,
+                    complement: movieTheater.complement ?? undefined,
+                }),
+        )
+    }
 }

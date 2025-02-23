@@ -1,6 +1,6 @@
 import { MovieTheatersRepository } from '../../application/interfaces/repositories/movie-theaters-repository'
 import { CreateMovieTheaterService } from '../../application/services/create-movie-theater'
-import { Request, Response } from './controller'
+import { Controller, Request, Response } from './controller'
 
 export interface CreateMovieTheaterControllerInput {
     number: string
@@ -15,14 +15,14 @@ export interface CreateMovieTheaterControllerOutput {
     movieTheaterId: string
 }
 
-export class CreateMovieTheaterController {
+export class CreateMovieTheaterController implements Controller {
     constructor(
         private readonly movieTheatersRepository: MovieTheatersRepository,
     ) {}
 
     async handle(
         request: Request<CreateMovieTheaterControllerInput>,
-        response: Response<CreateMovieTheaterControllerOutput>,
+        response: Response,
     ) {
         const { body } = request
 
@@ -30,7 +30,7 @@ export class CreateMovieTheaterController {
             this.movieTheatersRepository,
         )
 
-        const movieTheaterId = await createMovieTheaterService.execute(body)
+        const movieTheaterId = await createMovieTheaterService.execute(body!)
 
         response.status(201).body({ movieTheaterId }).send()
     }
