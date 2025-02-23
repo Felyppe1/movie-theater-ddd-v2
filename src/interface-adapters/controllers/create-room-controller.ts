@@ -12,8 +12,12 @@ export interface CreateRoomControllerInput {
     technologyIds: string[]
 }
 
+export interface CreateRoomControllerOutput {
+    roomId: string
+}
+
 export class CreateRoomController
-    implements Controller<CreateRoomControllerInput>
+    implements Controller<CreateRoomControllerInput, CreateRoomControllerOutput>
 {
     constructor(
         private readonly roomsRepository: RoomsRepository,
@@ -24,7 +28,7 @@ export class CreateRoomController
 
     async handle(
         request: Request<CreateRoomControllerInput>,
-        response: Response,
+        response: Response<CreateRoomControllerOutput>,
     ) {
         const createRoomService = new CreateRoomService(
             this.roomsRepository,
@@ -35,8 +39,8 @@ export class CreateRoomController
 
         const { body } = request
 
-        await createRoomService.execute(body!)
+        const roomId = await createRoomService.execute(body!)
 
-        response.status(201).send()
+        response.status(201).body({ roomId }).send()
     }
 }

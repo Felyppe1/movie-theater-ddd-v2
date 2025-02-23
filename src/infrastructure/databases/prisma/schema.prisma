@@ -23,14 +23,13 @@ model Chair {
     row Int
     column Int
 
-    room_number Int
-    movie_theater_id String
+    room_id String
     chair_type_id Int
 
     // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
     // chairType ChairType @relation(fields: [chair_type_id], references: [id])
 
-    @@id([row, column, room_number, movie_theater_id])
+    @@id([row, column, room_id])
 }
 
 model Technology {
@@ -43,6 +42,7 @@ model Technology {
 }
 
 model Room {
+    id String @id @default(uuid())
     number Int
     movie_theater_id String
     row_length Int
@@ -51,19 +51,16 @@ model Room {
     // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     // technologies RoomTechnology[]
     // chairs Chair[]
-
-    @@id([number, movie_theater_id])
 }
 
 model RoomTechnology {
     technology_id String
-    room_number Int
-    movie_theater_id String
+    room_id String
 
     // technology Technology @relation(fields: [technology_id], references: [id])
     // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
 
-    @@id([technology_id, room_number, movie_theater_id])
+    @@id([technology_id, room_id])
 }
 
 model MovieTheater {

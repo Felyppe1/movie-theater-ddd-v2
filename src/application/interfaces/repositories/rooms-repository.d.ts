@@ -1,10 +1,5 @@
 import { Room } from '../../../domain/core/movie-theater-settings/room'
 
-export interface GetOneInput {
-    number: number
-    movieTheaterId: string
-}
-
 export interface NumberExistsInTheater {
     number: number
     movieTheaterId: string
@@ -12,6 +7,6 @@ export interface NumberExistsInTheater {
 
 export interface RoomsRepository {
     save(room: Room): Promise<void>
-    getOne(data: GetOneInput): Promise<Room | null>
+    getById(id: string): Promise<Room | null>
     numberExistsInTheater(data: NumberExistsInTheater): Promise<boolean>
 }

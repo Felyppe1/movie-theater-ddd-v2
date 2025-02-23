@@ -1,5 +1,4 @@
 import {
-    GetOneInput,
     NumberExistsInTheater,
     RoomsRepository,
 } from '../../../application/interfaces/repositories/rooms-repository'
@@ -12,8 +11,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
             row: number
             column: number
             chair_type_id: number
-            movie_theater_id: string
-            room_number: number
+            room_id: string
         }[]
 
         const { layout, ...data } = room.export()
@@ -26,8 +24,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
                     row,
                     column,
                     chair_type_id: layout[row][column]!,
-                    movie_theater_id: data.movieTheaterId,
-                    room_number: data.number,
+                    room_id: data.id,
                 })
             }
         }
@@ -52,23 +49,16 @@ export class PrismaRoomsRepository implements RoomsRepository {
             prisma.roomTechnology.createMany({
                 data: data.technologyIds.map(technologyId => ({
                     technology_id: technologyId,
-                    movie_theater_id: data.movieTheaterId,
-                    room_number: data.number,
+                    room_id: data.id,
                 })),
             }),
         ])
     }
 
-    async getOne({
-        number,
-        movieTheaterId,
-    }: GetOneInput): Promise<Room | null> {
+    async getById(id: string): Promise<Room | null> {
         const room = await prisma.room.findUnique({
             where: {
-                number_movie_theater_id: {
-                    number,
-                    movie_theater_id: movieTheaterId,
-                },
+                id,
             },
         })
 
@@ -83,8 +73,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
 
         const chairs = await prisma.chair.findMany({
             where: {
-                room_number: number,
-                movie_theater_id: movieTheaterId,
+                room_id: id,
             },
         })
 
@@ -95,12 +84,12 @@ export class PrismaRoomsRepository implements RoomsRepository {
 
         const technologies = await prisma.roomTechnology.findMany({
             where: {
-                room_number: number,
-                movie_theater_id: movieTheaterId,
+                room_id: id,
             },
         })
 
         return new Room({
+            id: room.id,
             number: room.number,
             movieTheaterId: room.movie_theater_id,
             technologyIds: technologies.map(

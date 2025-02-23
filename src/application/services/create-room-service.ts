@@ -80,5 +80,7 @@ export class CreateRoomService {
         const newRoom = Room.create(data)
 
         await this.roomsRepository.save(newRoom)
+
+        return newRoom.getId()
     }
 }
