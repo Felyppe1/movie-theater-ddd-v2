@@ -10,14 +10,20 @@ export interface CreateTechnologyControllerOutput {
     technologyId: string
 }
 
-export class CreateTechnologyController implements Controller {
+export class CreateTechnologyController
+    implements
+        Controller<
+            CreateTechnologyControllerInput,
+            CreateTechnologyControllerOutput
+        >
+{
     constructor(
         private readonly technologiesRepository: TechnologiesRepository,
     ) {}
 
     async handle(
         request: Request<CreateTechnologyControllerInput>,
-        response: Response,
+        response: Response<CreateTechnologyControllerOutput>,
     ) {
         const createTechnologyService = new CreateTechnologyService(
             this.technologiesRepository,

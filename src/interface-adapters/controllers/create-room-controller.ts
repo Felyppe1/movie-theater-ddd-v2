@@ -12,7 +12,9 @@ export interface CreateRoomControllerInput {
     technologyIds: string[]
 }
 
-export class CreateRoomController implements Controller {
+export class CreateRoomController
+    implements Controller<CreateRoomControllerInput>
+{
     constructor(
         private readonly roomsRepository: RoomsRepository,
         private readonly chairTypesRepository: ChairTypesRepository,

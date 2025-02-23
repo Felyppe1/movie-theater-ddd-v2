@@ -4,7 +4,7 @@ import {
 } from '../../../interface-adapters/controllers/controller'
 import { Response as ExpressResponse } from 'express'
 
-export class ExpressResponseAdapter implements Response {
+export class ExpressResponseAdapter implements Response<any> {
     private statusCode: number = 200
     private data: any
 

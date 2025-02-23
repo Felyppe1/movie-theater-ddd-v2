@@ -15,14 +15,24 @@ export interface CreateMovieTheaterControllerOutput {
     movieTheaterId: string
 }
 
-export class CreateMovieTheaterController implements Controller {
+export interface CreateMovieTheaterControllerOutput {
+    movieTheaterId: string
+}
+
+export class CreateMovieTheaterController
+    implements
+        Controller<
+            CreateMovieTheaterControllerInput,
+            CreateMovieTheaterControllerOutput
+        >
+{
     constructor(
         private readonly movieTheatersRepository: MovieTheatersRepository,
     ) {}
 
     async handle(
         request: Request<CreateMovieTheaterControllerInput>,
-        response: Response,
+        response: Response<CreateMovieTheaterControllerOutput>,
     ) {
         const { body } = request
 
