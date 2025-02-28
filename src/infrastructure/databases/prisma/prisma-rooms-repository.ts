@@ -10,7 +10,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
         const chairs = [] as {
             row: number
             column: number
-            chair_type_id: number
+            chair_type_id: string
             room_id: string
         }[]
 
@@ -117,7 +117,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
         const chairs = [] as {
             row: number
             column: number
-            chair_type_id: number
+            chair_type_id: string
             room_id: string
         }[]
 

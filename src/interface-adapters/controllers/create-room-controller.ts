@@ -9,7 +9,7 @@ import { Controller, Request, Response } from './controller'
 export interface CreateRoomControllerInput {
     movieTheaterId: string
     number: number
-    layout: (number | null)[][]
+    layout: (string | null)[][]
     technologyIds: string[]
 }
 

@@ -8,7 +8,7 @@ import { RoomsValidator } from '../interfaces/validators/rooms-validator'
 export interface CreateRoomServiceInput {
     movieTheaterId: string
     number: number
-    layout: (number | null)[][]
+    layout: (string | null)[][]
     technologyIds: string[]
 }
 

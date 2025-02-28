@@ -8,7 +8,7 @@ export class ZodRoomsValidator implements RoomsValidator {
         const schema = z.object({
             movieTheaterId: z.string().min(1),
             number: z.number(),
-            layout: z.array(z.array(z.number().nullable())),
+            layout: z.array(z.array(z.string().min(1).nullable())),
             technologyIds: z.array(z.string().min(1)),
         })
 
@@ -19,7 +19,7 @@ export class ZodRoomsValidator implements RoomsValidator {
         const schema = z.object({
             id: z.string().min(1),
             number: z.number(),
-            layout: z.array(z.array(z.number().nullable())),
+            layout: z.array(z.array(z.string().min(1).nullable())),
             technologyIds: z.array(z.string().min(1)),
         })
 

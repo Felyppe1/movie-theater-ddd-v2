@@ -4,14 +4,14 @@ interface RoomInput {
     id: string
     movieTheaterId: string
     number: number
-    layout: (number | null)[][]
+    layout: (string | null)[][]
     technologyIds: string[]
 }
 
 interface CreateRoomInput {
     movieTheaterId: string
     number: number
-    layout: (number | null)[][]
+    layout: (string | null)[][]
     technologyIds: string[]
 }
 
@@ -19,7 +19,7 @@ export class Room {
     private id: string
     private movieTheaterId: string
     private number: number
-    private layout: (number | null)[][]
+    private layout: (string | null)[][]
     private technologyIds: string[]
 
     static create({

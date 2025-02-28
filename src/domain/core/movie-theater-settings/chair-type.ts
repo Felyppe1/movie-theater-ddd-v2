@@ -1,11 +1,24 @@
+import { randomUUID } from 'crypto'
+
+export interface CreateChairTypeInput {
+    name: string
+}
+
 export interface ChairTypeInput {
-    id: number
+    id: string
     name: string
 }
 
 export class ChairType {
-    private id: number
+    private id: string
     private name: string
+
+    static create({ name }: CreateChairTypeInput) {
+        return new ChairType({
+            id: randomUUID(),
+            name,
+        })
+    }
 
     constructor({ id, name }: ChairTypeInput) {
         if (!id) {
@@ -22,5 +35,12 @@ export class ChairType {
 
     getId() {
         return this.id
+    }
+
+    export() {
+        return {
+            id: this.id,
+            name: this.name,
+        }
     }
 }

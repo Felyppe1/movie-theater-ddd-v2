@@ -8,7 +8,7 @@ import { RoomsValidator } from '../interfaces/validators/rooms-validator'
 export interface UpdateRoomServiceInput {
     id: string
     number: number
-    layout: (number | null)[][]
+    layout: (string | null)[][]
     technologyIds: string[]
 }
 

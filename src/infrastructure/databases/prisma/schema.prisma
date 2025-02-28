@@ -24,7 +24,7 @@ model Chair { // Maybe I should have indexes in the row and column
     column Int
 
     room_id String
-    chair_type_id Int
+    chair_type_id String
 
     // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
     // chairType ChairType @relation(fields: [chair_type_id], references: [id])
@@ -77,7 +77,7 @@ model MovieTheater {
 }
 
 model ChairType {
-    id Int @id @default(autoincrement())
+    id String @id @default(uuid())
     name String
 
     // movieTheaters MovieTheaterChairType[]
