@@ -1,8 +1,8 @@
 export interface Request<T = unknown> {
     body?: T
     params?: Record<string, string>
-    query?: Record<string, string | string[] | undefined>
-    headers?: Record<string, string | string[] | undefined>
+    query?: Record<string, string>
+    headers?: Record<string, string>
 }
 
 export interface Response<T = undefined> {

@@ -3,9 +3,18 @@ import { PrismaRoomsRepository } from '../../databases/prisma/prisma-rooms-repos
 import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chair-types-repository'
 import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
 import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
-import { CreateRoomController } from '../../../interface-adapters/controllers/create-room-controller'
-import { ExpressResponseAdapter } from './express-response-adapter'
-import { UpdateRoomController } from '../../../interface-adapters/controllers/update-room-controller'
+import {
+    CreateRoomController,
+    CreateRoomControllerInput,
+} from '../../../interface-adapters/controllers/create-room-controller'
+import {
+    ExpressResponseAdapter,
+    normalizeExpressRequest,
+} from './express-adapters'
+import {
+    UpdateRoomController,
+    UpdateRoomControllerInput,
+} from '../../../interface-adapters/controllers/update-room-controller'
 
 export const roomsRouter = Router()
 
@@ -22,14 +31,11 @@ roomsRouter.post('/', async (req, res) => {
         movieTheatersRepository,
     )
 
+    const normalizedRequest =
+        normalizeExpressRequest<CreateRoomControllerInput>(req)
     const expressResponseAdapter = new ExpressResponseAdapter(res)
 
-    await createRoomController.handle(
-        {
-            body: req.body,
-        },
-        expressResponseAdapter,
-    )
+    await createRoomController.handle(normalizedRequest, expressResponseAdapter)
 })
 
 roomsRouter.put('/:id', async (req, res) => {
@@ -43,13 +49,9 @@ roomsRouter.put('/:id', async (req, res) => {
         chairTypesRepository,
     )
 
+    const normalizedRequest =
+        normalizeExpressRequest<UpdateRoomControllerInput>(req)
     const expressResponseAdapter = new ExpressResponseAdapter(res)
 
-    await createRoomController.handle(
-        {
-            body: req.body,
-            params: req.params,
-        },
-        expressResponseAdapter,
-    )
+    await createRoomController.handle(normalizedRequest, expressResponseAdapter)
 })
