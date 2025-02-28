@@ -1,5 +1,5 @@
 import { MovieTheatersRepository } from '../../application/interfaces/repositories/movie-theaters-repository'
-import { CreateMovieTheaterService } from '../../application/services/create-movie-theater'
+import { CreateMovieTheaterService } from '../../application/services/create-movie-theater-service'
 import { Controller, Request, Response } from './controller'
 
 export interface CreateMovieTheaterControllerInput {

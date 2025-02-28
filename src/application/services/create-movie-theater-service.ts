@@ -1,7 +1,7 @@
 import { MovieTheater } from '../../domain/core/movie-theater-settings/movie-theater'
 import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 
-interface CreateMovieTheaterInput {
+interface CreateMovieTheaterServiceInput {
     number: string
     complement?: string
     zipCode: string
@@ -15,7 +15,7 @@ export class CreateMovieTheaterService {
         private readonly movieTheatersRepository: MovieTheatersRepository,
     ) {}
 
-    async execute(data: CreateMovieTheaterInput) {
+    async execute(data: CreateMovieTheaterServiceInput) {
         const movieTheater = MovieTheater.create(data)
 
         await this.movieTheatersRepository.save(movieTheater)

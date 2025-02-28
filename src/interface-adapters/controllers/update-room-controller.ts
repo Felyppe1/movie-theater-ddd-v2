@@ -1,6 +1,7 @@
 import { ChairTypesRepository } from '../../application/interfaces/repositories/chair-types-repository'
 import { RoomsRepository } from '../../application/interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../application/interfaces/repositories/technologies-repository'
+import { RoomsValidator } from '../../application/interfaces/validators/rooms-validator'
 import { UpdateRoomService } from '../../application/services/update-room-service'
 import { Controller, Request, Response } from './controller'
 
@@ -17,6 +18,7 @@ export class UpdateRoomController
         private readonly roomsRepository: RoomsRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly chairTypesRepository: ChairTypesRepository,
+        private readonly roomsValidator: RoomsValidator,
     ) {}
 
     async handle(
@@ -29,6 +31,7 @@ export class UpdateRoomController
             this.roomsRepository,
             this.technologiesRepository,
             this.chairTypesRepository,
+            this.roomsValidator,
         )
 
         await updateRoomService.execute({ ...body!, id: params!.id })

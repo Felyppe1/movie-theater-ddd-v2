@@ -15,6 +15,7 @@ import {
     UpdateRoomController,
     UpdateRoomControllerInput,
 } from '../../../interface-adapters/controllers/update-room-controller'
+import { ZodRoomsValidator } from '../../validators/zod/zod-rooms-validator'
 
 export const roomsRouter = Router()
 
@@ -23,12 +24,14 @@ roomsRouter.post('/', async (req, res) => {
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
     const movieTheatersRepository = new PrismaMovieTheatersRepository()
+    const roomsValidator = new ZodRoomsValidator()
 
     const createRoomController = new CreateRoomController(
         roomsRepository,
         chairTypesRepository,
         technologiesRepository,
         movieTheatersRepository,
+        roomsValidator,
     )
 
     const normalizedRequest =
@@ -42,11 +45,13 @@ roomsRouter.put('/:id', async (req, res) => {
     const roomsRepository = new PrismaRoomsRepository()
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
+    const roomsValidator = new ZodRoomsValidator()
 
     const createRoomController = new UpdateRoomController(
         roomsRepository,
         technologiesRepository,
         chairTypesRepository,
+        roomsValidator,
     )
 
     const normalizedRequest =

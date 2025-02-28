@@ -1,45 +1,10 @@
-import { PrismaRoomsRepository } from '../../databases/prisma/prisma-rooms-repository'
-import { PrismaChairTypesRepository } from '../../databases/prisma/prisma-chair-types-repository'
-import { PrismaTechnologiesRepository } from '../../databases/prisma/prisma-technologies-repository'
-import { PrismaMovieTheatersRepository } from '../../databases/prisma/prisma-movie-theaters-repository'
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import {
-    CreateRoomController,
-    CreateRoomControllerInput,
-} from '../../../interface-adapters/controllers/create-room-controller'
-import fastifyCookie from 'fastify-cookie'
-import { FastifyResponseAdapter } from './fastify-response-adapter'
+import { FastifyInstance } from 'fastify'
+import { movieTheatersRoutes } from './movie-theaters.routes'
+import { roomsRoutes } from './rooms.routes'
+import { technologiesRoutes } from './technologies.routes'
 
-export async function router(fastify: FastifyInstance) {
-    fastify.register(fastifyCookie)
-
-    fastify.route({
-        method: 'POST',
-        url: '/rooms',
-        handler: async (
-            request: FastifyRequest<{ Body: CreateRoomControllerInput }>,
-            reply: FastifyReply,
-        ) => {
-            const roomsRepository = new PrismaRoomsRepository()
-            const chairTypesRepository = new PrismaChairTypesRepository()
-            const technologiesRepository = new PrismaTechnologiesRepository()
-            const movieTheatersRepository = new PrismaMovieTheatersRepository()
-
-            const createRoomController = new CreateRoomController(
-                roomsRepository,
-                chairTypesRepository,
-                technologiesRepository,
-                movieTheatersRepository,
-            )
-
-            const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
-
-            await createRoomController.handle(
-                {
-                    body: request.body,
-                },
-                fastifyResponseAdapter,
-            )
-        },
-    })
+export async function routes(fastify: FastifyInstance) {
+    fastify.register(movieTheatersRoutes, { prefix: '/movie-theaters' })
+    fastify.register(roomsRoutes, { prefix: '/rooms' })
+    fastify.register(technologiesRoutes, { prefix: 'technologies' })
 }
