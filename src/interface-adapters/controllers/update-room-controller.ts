@@ -5,9 +5,8 @@ import { UpdateRoomService } from '../../application/services/update-room-servic
 import { Controller, Request, Response } from './controller'
 
 export interface UpdateRoomControllerInput {
-    movieTheaterId: string
     number: number
-    layout: number[][]
+    layout: (number | null)[][]
     technologyIds: string[]
 }
 

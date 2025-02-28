@@ -19,7 +19,7 @@ enum CLASSIFICATION {
 
 }
 
-model Chair {
+model Chair { // Maybe I should have indexes in the row and column
     row Int
     column Int
 

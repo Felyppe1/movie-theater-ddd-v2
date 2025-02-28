@@ -35,6 +35,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
         await prisma.$transaction([
             prisma.room.create({
                 data: {
+                    id: data.id,
                     movie_theater_id: data.movieTheaterId,
                     number: data.number,
                     row_length,
@@ -140,6 +141,12 @@ export class PrismaRoomsRepository implements RoomsRepository {
 
         await prisma.$transaction([
             prisma.chair.deleteMany({
+                where: {
+                    room_id: data.id,
+                },
+            }),
+
+            prisma.roomTechnology.deleteMany({
                 where: {
                     room_id: data.id,
                 },

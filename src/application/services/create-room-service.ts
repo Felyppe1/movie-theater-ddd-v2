@@ -7,7 +7,7 @@ import { TechnologiesRepository } from '../interfaces/repositories/technologies-
 interface CreateRoomInput {
     movieTheaterId: string
     number: number
-    layout: number[][]
+    layout: (number | null)[][]
     technologyIds: string[]
 }
 

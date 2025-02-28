@@ -7,7 +7,7 @@ import { TechnologiesRepository } from '../interfaces/repositories/technologies-
 export interface UpdateRoomServiceInput {
     id: string
     number: number
-    layout: number[][]
+    layout: (number | null)[][]
     technologyIds: string[]
 }
 
