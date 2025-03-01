@@ -2,10 +2,9 @@ import { Room } from '../../domain/core/movie-theater-settings/room'
 import { ConflictError } from '../../domain/errors/conflict-error'
 import { NotFoundError } from '../../domain/errors/not-found-error'
 import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
-import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
-import { RoomsValidator } from '../interfaces/validators/rooms-validator'
+import { Validator } from '../interfaces/validators/validator'
 
 export interface UpdateRoomServiceInput {
     id: string
@@ -19,11 +18,11 @@ export class UpdateRoomService {
         private readonly roomsRepository: RoomsRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly chairTypesRepository: ChairTypesRepository,
-        private readonly roomsValidator: RoomsValidator,
+        private readonly validator: Validator<UpdateRoomServiceInput>,
     ) {}
 
     async execute(data: UpdateRoomServiceInput) {
-        data = this.roomsValidator.updateData(data)
+        data = this.validator.validate(data)
 
         const room = await this.roomsRepository.getById(data.id)
 

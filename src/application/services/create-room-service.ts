@@ -5,7 +5,7 @@ import { ChairTypesRepository } from '../interfaces/repositories/chair-types-rep
 import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
-import { RoomsValidator } from '../interfaces/validators/rooms-validator'
+import { Validator } from '../interfaces/validators/validator'
 
 export interface CreateRoomServiceInput {
     movieTheaterId: string
@@ -20,11 +20,11 @@ export class CreateRoomService {
         private readonly chairTypesRepository: ChairTypesRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly movieTheatersRepository: MovieTheatersRepository,
-        private readonly roomsValidator: RoomsValidator,
+        private readonly validator: Validator<CreateRoomServiceInput>,
     ) {}
 
     async execute(data: CreateRoomServiceInput) {
-        data = this.roomsValidator.createData(data)
+        data = this.validator.validate(data)
 
         const movieTheater = await this.movieTheatersRepository.getById(
             data.movieTheaterId,

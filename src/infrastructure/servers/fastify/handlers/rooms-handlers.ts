@@ -3,7 +3,6 @@ import { PrismaRoomsRepository } from '../../../databases/prisma/prisma-rooms-re
 import { PrismaChairTypesRepository } from '../../../databases/prisma/prisma-chair-types-repository'
 import { PrismaTechnologiesRepository } from '../../../databases/prisma/prisma-technologies-repository'
 import { PrismaMovieTheatersRepository } from '../../../databases/prisma/prisma-movie-theaters-repository'
-import { ZodRoomsValidator } from '../../../validators/zod/zod-rooms-validator'
 import {
     CreateRoomController,
     CreateRoomControllerInput,
@@ -13,6 +12,12 @@ import {
     normalizeFastifyRequest,
 } from '../fastify-response-adapter'
 import { GetRoomController } from '../../../../interface-adapters/controllers/get-room-controller'
+import { ZodCreateRoomValidator } from '../../../validators/zod/zod-create-room-validator'
+import {
+    UpdateRoomController,
+    UpdateRoomControllerInput,
+} from '../../../../interface-adapters/controllers/update-room-controller'
+import { ZodUpdateRoomValidator } from '../../../validators/zod/zod-update-room-validator'
 
 export async function handleCreateRoom(
     request: FastifyRequest,
@@ -22,14 +27,14 @@ export async function handleCreateRoom(
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
     const movieTheatersRepository = new PrismaMovieTheatersRepository()
-    const roomsValidator = new ZodRoomsValidator()
+    const createRoomValidator = new ZodCreateRoomValidator()
 
     const createRoomController = new CreateRoomController(
         roomsRepository,
         chairTypesRepository,
         technologiesRepository,
         movieTheatersRepository,
-        roomsValidator,
+        createRoomValidator,
     )
 
     const normalizedRequest =
@@ -46,19 +51,17 @@ export async function handleUpdateRoom(
     const roomsRepository = new PrismaRoomsRepository()
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
-    const movieTheatersRepository = new PrismaMovieTheatersRepository()
-    const roomsValidator = new ZodRoomsValidator()
+    const updateRoomValidator = new ZodUpdateRoomValidator()
 
-    const createRoomController = new CreateRoomController(
+    const createRoomController = new UpdateRoomController(
         roomsRepository,
-        chairTypesRepository,
         technologiesRepository,
-        movieTheatersRepository,
-        roomsValidator,
+        chairTypesRepository,
+        updateRoomValidator,
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<CreateRoomControllerInput>(request)
+        normalizeFastifyRequest<UpdateRoomControllerInput>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createRoomController.handle(normalizedRequest, fastifyResponseAdapter)
