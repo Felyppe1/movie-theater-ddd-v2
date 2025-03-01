@@ -12,6 +12,7 @@ import {
     FastifyResponseAdapter,
     normalizeFastifyRequest,
 } from './fastify-response-adapter'
+import { GetRoomController } from '../../../interface-adapters/controllers/get-room-controller'
 
 export async function roomsRoutes(fastify: FastifyInstance) {
     fastify.route({
@@ -66,6 +67,25 @@ export async function roomsRoutes(fastify: FastifyInstance) {
             const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
             await createRoomController.handle(
+                normalizedRequest,
+                fastifyResponseAdapter,
+            )
+        },
+    })
+
+    fastify.route({
+        method: 'GET',
+        url: '/:id',
+        handler: async (request: FastifyRequest, reply: FastifyReply) => {
+            const roomsRepository = new PrismaRoomsRepository()
+
+            const getRoomController = new GetRoomController(roomsRepository)
+
+            const normalizedRequest =
+                normalizeFastifyRequest<undefined>(request)
+            const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
+
+            await getRoomController.handle(
                 normalizedRequest,
                 fastifyResponseAdapter,
             )

@@ -61,7 +61,7 @@ export class Room {
         }
 
         const hasAtLeastOneChair = layout.some(row =>
-            row.some(column => typeof column === 'number'),
+            row.some(column => typeof column === 'string'),
         )
         if (!layout || layout.length === 0 || !hasAtLeastOneChair) {
             throw Error('The room layout field is required')
