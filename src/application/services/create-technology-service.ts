@@ -1,4 +1,5 @@
 import { Technology } from '../../domain/core/movie-theater-settings/technology'
+import { ConflictError } from '../../domain/errors/conflict-error'
 import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
 
 export class CreateTechnologyService {
@@ -10,7 +11,7 @@ export class CreateTechnologyService {
         const technology = await this.technologiesRepository.getByName(name)
 
         if (technology) {
-            throw Error('Technology name already exists')
+            throw new ConflictError(`Technology name ${name} already exists`)
         }
 
         const newTechnology = Technology.create({ name })

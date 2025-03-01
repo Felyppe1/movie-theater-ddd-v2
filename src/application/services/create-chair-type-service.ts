@@ -1,4 +1,5 @@
 import { ChairType } from '../../domain/core/movie-theater-settings/chair-type'
+import { ConflictError } from '../../domain/errors/conflict-error'
 import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
 
 export interface CreateChairTypeServiceInput {
@@ -13,7 +14,7 @@ export class CreateChairTypeService {
             await this.chairTypesRepository.getByName(name)
 
         if (chairTypeNameExists) {
-            throw Error(`Chair type id ${name} already exists`)
+            throw new ConflictError(`Chair type id ${name} already exists`)
         }
 
         const chairType = ChairType.create({ name })

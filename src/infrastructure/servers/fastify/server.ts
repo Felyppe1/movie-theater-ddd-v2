@@ -1,6 +1,9 @@
 import Fastify, { FastifyInstance } from 'fastify'
 import { routes } from './routes'
 import fastifyCookie from 'fastify-cookie'
+import { InvalidDataError } from '../../../domain/errors/invalid-data-error'
+import { ConflictError } from '../../../domain/errors/conflict-error'
+import { NotFoundError } from '../../../domain/errors/not-found-error'
 
 export class FastifyServer {
     private app: FastifyInstance
@@ -13,8 +16,19 @@ export class FastifyServer {
         this.app.register(routes)
 
         this.app.setErrorHandler((error, request, reply) => {
-            // TODO: handle errors in here
-            return reply.status(500).send(error.message)
+            if (error instanceof InvalidDataError) {
+                return reply.status(400).send({ error: error.message })
+            }
+
+            if (error instanceof NotFoundError) {
+                return reply.status(404).send({ error: error.message })
+            }
+
+            if (error instanceof ConflictError) {
+                return reply.status(409).send({ error: error.message })
+            }
+
+            return reply.status(500).send({ error: error.message })
         })
     }
 

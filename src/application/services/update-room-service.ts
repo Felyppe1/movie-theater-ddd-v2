@@ -1,4 +1,6 @@
 import { Room } from '../../domain/core/movie-theater-settings/room'
+import { ConflictError } from '../../domain/errors/conflict-error'
+import { NotFoundError } from '../../domain/errors/not-found-error'
 import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
 import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
@@ -26,7 +28,7 @@ export class UpdateRoomService {
         const room = await this.roomsRepository.getById(data.id)
 
         if (!room) {
-            throw Error(`Room id ${data.id} does not exists`)
+            throw new NotFoundError(`Room id ${data.id} was not found`)
         }
 
         if (data.number !== room.getNumber()) {
@@ -37,7 +39,7 @@ export class UpdateRoomService {
                 })
 
             if (roomNumberExistsInTheater) {
-                throw Error(
+                throw new ConflictError(
                     `Movie theater already has a room with number ${data.number}`,
                 )
             }
@@ -63,7 +65,9 @@ export class UpdateRoomService {
                     existentChairTypeIds.includes(chairTypeId)
 
                 if (!chairTypeExists) {
-                    throw Error(`Chair type id ${chairTypeId} does not exist`)
+                    throw new NotFoundError(
+                        `Chair type id ${chairTypeId} was not found`,
+                    )
                 }
             }
         }
@@ -73,8 +77,8 @@ export class UpdateRoomService {
         )
 
         if (technologyDoesNotExist) {
-            throw Error(
-                `Technology id ${technologyDoesNotExist} does not exist`,
+            throw new NotFoundError(
+                `Technology id ${technologyDoesNotExist} was not found`,
             )
         }
 

@@ -1,7 +1,8 @@
 import { RoomsValidator } from '../../../application/interfaces/validators/rooms-validator'
 import { CreateRoomServiceInput } from '../../../application/services/create-room-service'
-import { z } from 'zod'
+import { z, ZodError } from 'zod'
 import { UpdateRoomServiceInput } from '../../../application/services/update-room-service'
+import { InvalidDataError } from '../../../domain/errors/invalid-data-error'
 
 export class ZodRoomsValidator implements RoomsValidator {
     createData(data: CreateRoomServiceInput): CreateRoomServiceInput {
@@ -12,7 +13,19 @@ export class ZodRoomsValidator implements RoomsValidator {
             technologyIds: z.array(z.string().min(1)),
         })
 
-        return schema.parse(data)
+        try {
+            return schema.parse(data)
+        } catch (error) {
+            if (error instanceof ZodError) {
+                const errorMessage = error.errors
+                    .map(err => `${err.path.join('.')}: ${err.message}`)
+                    .join('; ')
+
+                throw new InvalidDataError(errorMessage)
+            }
+
+            throw error
+        }
     }
 
     updateData(data: UpdateRoomServiceInput): UpdateRoomServiceInput {
@@ -23,6 +36,18 @@ export class ZodRoomsValidator implements RoomsValidator {
             technologyIds: z.array(z.string().min(1)),
         })
 
-        return schema.parse(data)
+        try {
+            return schema.parse(data)
+        } catch (error) {
+            if (error instanceof ZodError) {
+                const errorMessage = error.errors
+                    .map(err => `${err.path.join('.')}: ${err.message}`)
+                    .join('; ')
+
+                throw new InvalidDataError(errorMessage)
+            }
+
+            throw error
+        }
     }
 }

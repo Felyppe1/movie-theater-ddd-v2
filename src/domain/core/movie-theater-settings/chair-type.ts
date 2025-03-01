@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto'
+import { InvalidDataError } from '../../errors/invalid-data-error'
 
 export interface CreateChairTypeInput {
     name: string
@@ -22,11 +23,11 @@ export class ChairType {
 
     constructor({ id, name }: ChairTypeInput) {
         if (!id) {
-            throw Error('The id attribute is required')
+            throw new InvalidDataError('The id attribute is required')
         }
 
         if (!name) {
-            throw Error('The name attribute is required')
+            throw new InvalidDataError('The name attribute is required')
         }
 
         this.id = id

@@ -1,4 +1,6 @@
 import { Room } from '../../domain/core/movie-theater-settings/room'
+import { ConflictError } from '../../domain/errors/conflict-error'
+import { NotFoundError } from '../../domain/errors/not-found-error'
 import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
 import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
@@ -29,8 +31,8 @@ export class CreateRoomService {
         )
 
         if (!movieTheater) {
-            throw Error(
-                `Movie theater id ${data.movieTheaterId} does not exist`,
+            throw new NotFoundError(
+                `Movie theater id ${data.movieTheaterId} was not found`,
             )
         }
 
@@ -41,7 +43,7 @@ export class CreateRoomService {
             })
 
         if (roomNumberExistsInTheater) {
-            throw Error(
+            throw new ConflictError(
                 `Movie theater already has a room with number ${data.number}`,
             )
         }
@@ -66,7 +68,9 @@ export class CreateRoomService {
                     existentChairTypeIds.includes(chairTypeId)
 
                 if (!chairTypeExists) {
-                    throw Error(`Chair type id ${chairTypeId} does not exist`)
+                    throw new NotFoundError(
+                        `Chair type id ${chairTypeId} was not found`,
+                    )
                 }
             }
         }
@@ -76,8 +80,8 @@ export class CreateRoomService {
         )
 
         if (technologyDoesNotExist) {
-            throw Error(
-                `Technology id ${technologyDoesNotExist} does not exist`,
+            throw new NotFoundError(
+                `Technology id ${technologyDoesNotExist} was not found`,
             )
         }
 

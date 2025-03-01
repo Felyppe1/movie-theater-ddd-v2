@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto'
+import { InvalidDataError } from '../../errors/invalid-data-error'
 
 interface CreateMovieTheaterInput {
     number: string
@@ -77,19 +78,19 @@ export class Address {
         state,
     }: AddressInput) {
         if (!number) {
-            throw Error('The number attribute is required')
+            throw new InvalidDataError('The number attribute is required')
         }
 
         if (!street) {
-            throw Error('The street attribute is required')
+            throw new InvalidDataError('The street attribute is required')
         }
 
         if (!city) {
-            throw Error('The city attribute is required')
+            throw new InvalidDataError('The city attribute is required')
         }
 
         if (!state) {
-            throw Error('The state attribute is required')
+            throw new InvalidDataError('The state attribute is required')
         }
 
         this.number = number

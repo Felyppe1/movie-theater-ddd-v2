@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../domain/errors/not-found-error'
 import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
 
 export class GetRoomService {
@@ -7,7 +8,7 @@ export class GetRoomService {
         const room = await this.roomsRepository.getById(id)
 
         if (!room) {
-            throw Error(`Room id ${id} not found`)
+            throw new NotFoundError(`Room id ${id} was not found`)
         }
 
         return room.export()

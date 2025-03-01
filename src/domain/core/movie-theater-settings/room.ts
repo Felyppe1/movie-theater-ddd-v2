@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto'
+import { InvalidDataError } from '../../errors/invalid-data-error'
 
 interface RoomInput {
     id: string
@@ -45,26 +46,30 @@ export class Room {
         technologyIds,
     }: RoomInput) {
         if (!id) {
-            throw Error('The room id field is required')
+            throw new InvalidDataError('The room id field is required')
         }
 
         if (!movieTheaterId) {
-            throw Error('The room movieTheaterId field is required')
+            throw new InvalidDataError(
+                'The room movieTheaterId field is required',
+            )
         }
 
-        if (number === undefined || number === null) {
-            throw Error('The room number field is required')
+        if (number === undefined) {
+            throw new InvalidDataError('The room number field is required')
         }
 
         if (!technologyIds || technologyIds.length === 0) {
-            throw Error('The room technologyIds field is required')
+            throw new InvalidDataError(
+                'The room technologyIds field is required',
+            )
         }
 
         const hasAtLeastOneChair = layout.some(row =>
             row.some(column => typeof column === 'string'),
         )
         if (!layout || layout.length === 0 || !hasAtLeastOneChair) {
-            throw Error('The room layout field is required')
+            throw new InvalidDataError('The room layout field is required')
         }
 
         const firstLineLength = layout[0].length
@@ -73,7 +78,7 @@ export class Room {
             const nthLineLength = layout[nthLine].length
 
             if (nthLineLength !== firstLineLength) {
-                throw Error(
+                throw new InvalidDataError(
                     `The length of line ${nthLine + 1} is not equal to the length of the first line`,
                 )
             }
