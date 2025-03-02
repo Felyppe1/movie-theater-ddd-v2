@@ -12,12 +12,10 @@ import {
     normalizeFastifyRequest,
 } from '../fastify-response-adapter'
 import { GetRoomController } from '../../../../interface-adapters/controllers/get-room-controller'
-import { ZodCreateRoomValidator } from '../../../validators/zod/zod-create-room-validator'
 import {
     UpdateRoomController,
     UpdateRoomControllerInput,
 } from '../../../../interface-adapters/controllers/update-room-controller'
-import { ZodUpdateRoomValidator } from '../../../validators/zod/zod-update-room-validator'
 
 export async function handleCreateRoom(
     request: FastifyRequest,
@@ -27,14 +25,12 @@ export async function handleCreateRoom(
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
     const movieTheatersRepository = new PrismaMovieTheatersRepository()
-    const createRoomValidator = new ZodCreateRoomValidator()
 
     const createRoomController = new CreateRoomController(
         roomsRepository,
         chairTypesRepository,
         technologiesRepository,
         movieTheatersRepository,
-        createRoomValidator,
     )
 
     const normalizedRequest =
@@ -51,13 +47,11 @@ export async function handleUpdateRoom(
     const roomsRepository = new PrismaRoomsRepository()
     const chairTypesRepository = new PrismaChairTypesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
-    const updateRoomValidator = new ZodUpdateRoomValidator()
 
     const createRoomController = new UpdateRoomController(
         roomsRepository,
         technologiesRepository,
         chairTypesRepository,
-        updateRoomValidator,
     )
 
     const normalizedRequest =

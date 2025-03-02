@@ -2,11 +2,7 @@ import { ChairTypesRepository } from '../../application/interfaces/repositories/
 import { MovieTheatersRepository } from '../../application/interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../../application/interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../application/interfaces/repositories/technologies-repository'
-import { Validator } from '../../application/interfaces/validators/validator'
-import {
-    CreateRoomService,
-    CreateRoomServiceInput,
-} from '../../application/services/create-room-service'
+import { CreateRoomService } from '../../application/services/create-room-service'
 import { Controller, Request, Response } from './controller'
 
 export interface CreateRoomControllerInput {
@@ -28,7 +24,6 @@ export class CreateRoomController
         private readonly chairTypesRepository: ChairTypesRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly movieTheatersRepository: MovieTheatersRepository,
-        private readonly validator: Validator<CreateRoomServiceInput>,
     ) {}
 
     async handle(
@@ -40,7 +35,6 @@ export class CreateRoomController
             this.chairTypesRepository,
             this.technologiesRepository,
             this.movieTheatersRepository,
-            this.validator,
         )
 
         const { body } = request

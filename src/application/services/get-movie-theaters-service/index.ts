@@ -1,4 +1,4 @@
-import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
+import { MovieTheatersRepository } from '../../interfaces/repositories/movie-theaters-repository'
 
 export class GetMovieTheatersService {
     constructor(

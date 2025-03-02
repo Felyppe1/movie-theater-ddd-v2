@@ -1,10 +1,7 @@
-import { ChairType } from '../../domain/core/movie-theater-settings/chair-type'
-import { ConflictError } from '../../domain/errors/conflict-error'
-import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
-
-export interface CreateChairTypeServiceInput {
-    name: string
-}
+import { ChairType } from '../../../domain/core/movie-theater-settings/chair-type'
+import { ConflictError } from '../../../domain/errors/conflict-error'
+import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
+import { CreateChairTypeServiceInput } from './create-chair-type-service-input'
 
 export class CreateChairTypeService {
     constructor(private readonly chairTypesRepository: ChairTypesRepository) {}

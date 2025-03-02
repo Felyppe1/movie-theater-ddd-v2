@@ -31,7 +31,7 @@ export class CreateTechnologyController
 
         const { body } = request
 
-        const technologyId = await createTechnologyService.execute(body!.name)
+        const technologyId = await createTechnologyService.execute(body!)
 
         response.status(201).body({ technologyId }).send()
     }

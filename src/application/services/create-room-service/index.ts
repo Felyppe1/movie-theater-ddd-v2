@@ -1,18 +1,11 @@
-import { Room } from '../../domain/core/movie-theater-settings/room'
-import { ConflictError } from '../../domain/errors/conflict-error'
-import { NotFoundError } from '../../domain/errors/not-found-error'
-import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
-import { MovieTheatersRepository } from '../interfaces/repositories/movie-theaters-repository'
-import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
-import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
-import { Validator } from '../interfaces/validators/validator'
-
-export interface CreateRoomServiceInput {
-    movieTheaterId: string
-    number: number
-    layout: (string | null)[][]
-    technologyIds: string[]
-}
+import { Room } from '../../../domain/core/movie-theater-settings/room'
+import { ConflictError } from '../../../domain/errors/conflict-error'
+import { NotFoundError } from '../../../domain/errors/not-found-error'
+import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
+import { MovieTheatersRepository } from '../../interfaces/repositories/movie-theaters-repository'
+import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
+import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
+import { CreateRoomServiceInput } from './create-room-service-input'
 
 export class CreateRoomService {
     constructor(
@@ -20,12 +13,9 @@ export class CreateRoomService {
         private readonly chairTypesRepository: ChairTypesRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly movieTheatersRepository: MovieTheatersRepository,
-        private readonly validator: Validator<CreateRoomServiceInput>,
     ) {}
 
     async execute(data: CreateRoomServiceInput) {
-        data = this.validator.validate(data)
-
         const movieTheater = await this.movieTheatersRepository.getById(
             data.movieTheaterId,
         )

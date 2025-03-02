@@ -1,29 +1,19 @@
-import { Room } from '../../domain/core/movie-theater-settings/room'
-import { ConflictError } from '../../domain/errors/conflict-error'
-import { NotFoundError } from '../../domain/errors/not-found-error'
-import { ChairTypesRepository } from '../interfaces/repositories/chair-types-repository'
-import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
-import { TechnologiesRepository } from '../interfaces/repositories/technologies-repository'
-import { Validator } from '../interfaces/validators/validator'
-
-export interface UpdateRoomServiceInput {
-    id: string
-    number: number
-    layout: (string | null)[][]
-    technologyIds: string[]
-}
+import { Room } from '../../../domain/core/movie-theater-settings/room'
+import { ConflictError } from '../../../domain/errors/conflict-error'
+import { NotFoundError } from '../../../domain/errors/not-found-error'
+import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
+import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
+import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
+import { UpdateRoomServiceInput } from './update-room-service-input'
 
 export class UpdateRoomService {
     constructor(
         private readonly roomsRepository: RoomsRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly chairTypesRepository: ChairTypesRepository,
-        private readonly validator: Validator<UpdateRoomServiceInput>,
     ) {}
 
     async execute(data: UpdateRoomServiceInput) {
-        data = this.validator.validate(data)
-
         const room = await this.roomsRepository.getById(data.id)
 
         if (!room) {

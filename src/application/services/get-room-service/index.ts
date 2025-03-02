@@ -1,5 +1,5 @@
-import { NotFoundError } from '../../domain/errors/not-found-error'
-import { RoomsRepository } from '../interfaces/repositories/rooms-repository'
+import { NotFoundError } from '../../../domain/errors/not-found-error'
+import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
 
 export class GetRoomService {
     constructor(private readonly roomsRepository: RoomsRepository) {}
