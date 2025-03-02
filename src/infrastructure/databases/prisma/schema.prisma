@@ -30,6 +30,7 @@ model Chair { // Maybe I should have indexes in the row and column
     // chairType ChairType @relation(fields: [chair_type_id], references: [id])
 
     @@id([row, column, room_id])
+    @@map("chair")
 }
 
 model Technology {
@@ -39,6 +40,7 @@ model Technology {
 
     // rooms RoomTechnology[]
     // movies Movie[]
+    @@map("technology")
 }
 
 model Room {
@@ -51,6 +53,7 @@ model Room {
     // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     // technologies RoomTechnology[]
     // chairs Chair[]
+    @@map("room")
 }
 
 model RoomTechnology {
@@ -61,6 +64,7 @@ model RoomTechnology {
     // room Room @relation(fields: [room_number, movie_theater_id], references: [number, movie_theater_id])
 
     @@id([technology_id, room_id])
+    @@map("room_technology")
 }
 
 model MovieTheater {
@@ -74,6 +78,7 @@ model MovieTheater {
 
     // chairTypes MovieTheaterChairType[]
     // rooms Room[]
+    @@map("movie_theater")
 }
 
 model ChairType {
@@ -82,6 +87,7 @@ model ChairType {
 
     // movieTheaters MovieTheaterChairType[]
     // chairs Chair[]
+    @@map("chair_type")
 }
 
 model MovieTheaterChairType {
@@ -93,6 +99,7 @@ model MovieTheaterChairType {
     // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
     
     @@id([chair_type_id, movie_theater_id])
+    @@map("movie_theater_chair_type")
 }
 
 model Movie {
@@ -108,5 +115,6 @@ model Movie {
     final_date DateTime
 
     // technologies Technology[]
+    @@map("movie")
 }
 

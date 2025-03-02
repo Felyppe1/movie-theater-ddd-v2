@@ -1,31 +1,31 @@
 services:
-  database:
-    image: postgres
-    container_name: movie-theater-db
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=movie-theater
-    volumes:
-      - movie-theater-data:/data/postgres
-    networks:
-      - movie-theater
-  backend:
-    build: .
-    container_name: movie-theater-backend
-    ports:
-      - 3333:3333
-      - 5555:5555
-    depends_on:
-      - database
-    environment:
-      - DATABASE_URL=postgresql://postgres:123@database:5432/movie-theater
-    networks:
-      - movie-theater
+    database:
+        image: postgres
+        container_name: movie-theater-db
+        ports:
+            - 5433:5432
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=123
+            - POSTGRES_DB=movie-theater
+        volumes:
+            - movie-theater-data:/data/postgres
+        networks:
+            - movie-theater
+    backend:
+        build: .
+        container_name: movie-theater-backend
+        ports:
+            - 3333:3333
+            - 5555:5555
+        depends_on:
+            - database
+        environment:
+            - DATABASE_URL=postgresql://postgres:123@database:5432/movie-theater
+        networks:
+            - movie-theater
 volumes:
-  movie-theater-data:
+    movie-theater-data:
 
 networks:
-  movie-theater:
+    movie-theater:

@@ -5,46 +5,45 @@ CREATE TYPE "GENDER" AS ENUM ('HORROR', 'COMEDY', 'ACTION');
 CREATE TYPE "CLASSIFICATION" AS ENUM ('FREE', '12');
 
 -- CreateTable
-CREATE TABLE "Chair" (
+CREATE TABLE "chair" (
     "row" INTEGER NOT NULL,
     "column" INTEGER NOT NULL,
-    "room_number" INTEGER NOT NULL,
-    "movie_theater_id" TEXT NOT NULL,
-    "chair_type_id" INTEGER NOT NULL,
+    "room_id" TEXT NOT NULL,
+    "chair_type_id" TEXT NOT NULL,
 
-    CONSTRAINT "Chair_pkey" PRIMARY KEY ("row","column","room_number","movie_theater_id")
+    CONSTRAINT "chair_pkey" PRIMARY KEY ("row","column","room_id")
 );
 
 -- CreateTable
-CREATE TABLE "Technology" (
+CREATE TABLE "technology" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "percentageIncrease" DOUBLE PRECISION,
 
-    CONSTRAINT "Technology_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "technology_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Room" (
+CREATE TABLE "room" (
+    "id" TEXT NOT NULL,
     "number" INTEGER NOT NULL,
     "movie_theater_id" TEXT NOT NULL,
     "row_length" INTEGER NOT NULL,
     "column_length" INTEGER NOT NULL,
 
-    CONSTRAINT "Room_pkey" PRIMARY KEY ("number","movie_theater_id")
+    CONSTRAINT "room_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "RoomTechnology" (
+CREATE TABLE "room_technology" (
     "technology_id" TEXT NOT NULL,
-    "room_number" INTEGER NOT NULL,
-    "movie_theater_id" TEXT NOT NULL,
+    "room_id" TEXT NOT NULL,
 
-    CONSTRAINT "RoomTechnology_pkey" PRIMARY KEY ("technology_id","room_number","movie_theater_id")
+    CONSTRAINT "room_technology_pkey" PRIMARY KEY ("technology_id","room_id")
 );
 
 -- CreateTable
-CREATE TABLE "MovieTheater" (
+CREATE TABLE "movie_theater" (
     "id" TEXT NOT NULL,
     "number" TEXT NOT NULL,
     "complement" TEXT,
@@ -53,28 +52,28 @@ CREATE TABLE "MovieTheater" (
     "city" TEXT NOT NULL,
     "state" TEXT NOT NULL,
 
-    CONSTRAINT "MovieTheater_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "movie_theater_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "ChairType" (
-    "id" SERIAL NOT NULL,
+CREATE TABLE "chair_type" (
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "ChairType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "chair_type_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "MovieTheaterChairType" (
+CREATE TABLE "movie_theater_chair_type" (
     "chair_type_id" INTEGER NOT NULL,
     "movie_theater_id" TEXT NOT NULL,
     "value" DOUBLE PRECISION,
 
-    CONSTRAINT "MovieTheaterChairType_pkey" PRIMARY KEY ("chair_type_id","movie_theater_id")
+    CONSTRAINT "movie_theater_chair_type_pkey" PRIMARY KEY ("chair_type_id","movie_theater_id")
 );
 
 -- CreateTable
-CREATE TABLE "Movie" (
+CREATE TABLE "movie" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "sinopsis" TEXT NOT NULL,
@@ -86,5 +85,5 @@ CREATE TABLE "Movie" (
     "initial_date" TIMESTAMP(3) NOT NULL,
     "final_date" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "movie_pkey" PRIMARY KEY ("id")
 );
