@@ -8,7 +8,8 @@
         "start": "node dist/main.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky",
-        "cli": "node dist/infrastructure/clis/commander/rooms.js"
+        "cli": "node dist/infrastructure/clis/commander/rooms.js",
+        "vercel-build": "npx prisma migrate deploy"
     },
     "lint-staged": {
         "**/*": "prettier --write --ignore-unknown"
