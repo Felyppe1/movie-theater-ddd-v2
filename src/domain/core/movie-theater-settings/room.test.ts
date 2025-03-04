@@ -7,7 +7,7 @@ describe('Room', () => {
             movieTheaterId: '1',
             number: 1,
             technologyIds: ['1'],
-            layout: [[1]],
+            layout: [['1']],
         })
     })
 
@@ -38,6 +38,7 @@ describe('Room', () => {
             expect(
                 () =>
                     new Room({
+                        id: '1',
                         movieTheaterId: '1',
                         number: 1,
                         technologyIds: ['1'],
@@ -50,6 +51,7 @@ describe('Room', () => {
             expect(
                 () =>
                     new Room({
+                        id: '1',
                         movieTheaterId: '1',
                         number: 1,
                         technologyIds: ['1'],
@@ -62,6 +64,7 @@ describe('Room', () => {
             expect(
                 () =>
                     new Room({
+                        id: '1',
                         movieTheaterId: '1',
                         number: 1,
                         technologyIds: ['1'],
@@ -74,10 +77,11 @@ describe('Room', () => {
             expect(
                 () =>
                     new Room({
+                        id: '1',
                         movieTheaterId: '1',
                         number: 1,
                         technologyIds: ['1'],
-                        layout: [[1], [1, 1]],
+                        layout: [['1'], ['1', '1']],
                     }),
             ).toThrow(
                 'The length of line 2 is not equal to the length of the first line',
