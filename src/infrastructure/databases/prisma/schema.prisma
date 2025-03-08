@@ -8,13 +8,13 @@ datasource db {
 }
 
 enum GENDER {
-    HORROR
-    COMEDY
-    ACTION
+    HORROR @map("Terror")
+    COMEDY @map("Comédia")
+    ACTION @map("Ação")
 }
 
 enum CLASSIFICATION {
-    FREE
+    L
     TWELVE @map("12")
 }
 
@@ -104,15 +104,26 @@ model MovieTheaterChairType {
 model Movie {
     id             String           @id @default(uuid())
     name           String
-    sinopsis       String
+    synopsis       String
     duration       Int
     poster         String
     gender         GENDER[]
-    classification CLASSIFICATION[]
+    classification CLASSIFICATION
     subtitled      Boolean
     initial_date   DateTime
     final_date     DateTime
 
     // technologies Technology[]
     @@map("movie")
+}
+
+model MovieTechnology {
+    technology_id String
+    movie_id       String
+
+    // technology Technology @relation(fields: [technology_id], references: [id])
+    // movie Movie @relation(fields: [movie_id], references: [id])
+
+    @@id([technology_id, movie_id])
+    @@map("movie_technology")
 }

@@ -7,7 +7,7 @@ import {
 import {
     FastifyResponseAdapter,
     normalizeFastifyRequest,
-} from '../fastify-response-adapter'
+} from '../fastify-adapters'
 
 export async function handleCreateTechnology(
     request: FastifyRequest,
@@ -20,7 +20,7 @@ export async function handleCreateTechnology(
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<CreateTechnologyControllerInput>(request)
+        await normalizeFastifyRequest<CreateTechnologyControllerInput>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createTechnologyController.handle(

@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "dev": "ts-node-dev --respawn src/main.ts",
+        "dev": "ts-node-dev --respawn src/index.ts",
         "build": "tsc",
-        "start": "node dist/main.js",
+        "start": "node dist/index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prepare": "husky",
         "cli": "node dist/infrastructure/clis/commander/rooms.js",
@@ -39,6 +39,9 @@
         "vitest": "^3.0.5"
     },
     "dependencies": {
+        "@fastify/cors": "^11.0.0",
+        "@fastify/multipart": "^9.0.3",
+        "@google-cloud/storage": "^7.15.2",
         "@prisma/client": "^6.4.1",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",

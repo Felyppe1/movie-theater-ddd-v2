@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "GENDER" AS ENUM ('HORROR', 'COMEDY', 'ACTION');
+CREATE TYPE "GENDER" AS ENUM ('Terror', 'Comédia', 'Ação');
 
 -- CreateEnum
-CREATE TYPE "CLASSIFICATION" AS ENUM ('FREE', '12');
+CREATE TYPE "CLASSIFICATION" AS ENUM ('L', '12');
 
 -- CreateTable
 CREATE TABLE "chair" (
@@ -76,11 +76,11 @@ CREATE TABLE "movie_theater_chair_type" (
 CREATE TABLE "movie" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "sinopsis" TEXT NOT NULL,
+    "synopsis" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
     "poster" TEXT NOT NULL,
     "gender" "GENDER"[],
-    "classification" "CLASSIFICATION"[],
+    "classification" "CLASSIFICATION" NOT NULL,
     "subtitled" BOOLEAN NOT NULL,
     "initial_date" TIMESTAMP(3) NOT NULL,
     "final_date" TIMESTAMP(3) NOT NULL,

@@ -7,7 +7,7 @@ import {
 import {
     FastifyResponseAdapter,
     normalizeFastifyRequest,
-} from '../fastify-response-adapter'
+} from '../fastify-adapters'
 
 export async function handleCreateChairType(
     request: FastifyRequest,
@@ -20,7 +20,7 @@ export async function handleCreateChairType(
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<CreateChairTypeControllerInput>(request)
+        await normalizeFastifyRequest<CreateChairTypeControllerInput>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createChairTypesController.handle(

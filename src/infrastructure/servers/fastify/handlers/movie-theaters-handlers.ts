@@ -7,7 +7,7 @@ import {
 import {
     FastifyResponseAdapter,
     normalizeFastifyRequest,
-} from '../fastify-response-adapter'
+} from '../fastify-adapters'
 import { GetMovieTheatersController } from '../../../../interface-adapters/controllers/get-movie-theaters-controller'
 
 export async function handleCreateMovieTheater(
@@ -21,7 +21,9 @@ export async function handleCreateMovieTheater(
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<CreateMovieTheaterControllerInput>(request)
+        await normalizeFastifyRequest<CreateMovieTheaterControllerInput>(
+            request,
+        )
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createMovieTheaterController.handle(
@@ -40,7 +42,7 @@ export async function handleGetMovieTheater(
         movieTheatersRepository,
     )
 
-    const normalizedRequest = normalizeFastifyRequest(request)
+    const normalizedRequest = await normalizeFastifyRequest(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await getMovieTheatersController.handle(

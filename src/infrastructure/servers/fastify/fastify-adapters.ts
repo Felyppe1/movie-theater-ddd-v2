@@ -4,12 +4,29 @@ import {
     Request,
     Response,
 } from '../../../interface-adapters/controllers/controller'
+import { MultipartFile } from '@fastify/multipart'
 
-export function normalizeFastifyRequest<T = unknown>(
+export async function normalizeFastifyRequest<T = unknown>(
     req: FastifyRequest,
-): Request<T> {
+): Promise<Request<T>> {
+    let file: MultipartFile | undefined
+    let body: Record<string, any> = {}
+
+    if (req.isMultipart()) {
+        const parts = req.parts()
+        for await (const part of parts) {
+            if (part.type === 'file') {
+                file = part
+            } else {
+                body[part.fieldname] = part.value
+            }
+        }
+    } else {
+        body = req.body as Record<string, any>
+    }
+
     return {
-        body: req.body as T,
+        body: body as T,
         params: req.params as Record<string, string>,
         query: Object.fromEntries(
             Object.entries(req.query as Record<string, any>).map(
@@ -22,6 +39,23 @@ export function normalizeFastifyRequest<T = unknown>(
                 String(value),
             ]),
         ) as Record<string, string>,
+        file: file
+            ? {
+                  filename: file.filename,
+                  fieldname: file.fieldname,
+                  mimetype: file.mimetype,
+                  file: file.file,
+                  toBuffer: async (): Promise<Buffer> => {
+                      const chunks: Buffer[] = []
+
+                      for await (const chunk of file.file) {
+                          chunks.push(chunk)
+                      }
+
+                      return Buffer.concat(chunks)
+                  },
+              }
+            : undefined,
     }
 }
 

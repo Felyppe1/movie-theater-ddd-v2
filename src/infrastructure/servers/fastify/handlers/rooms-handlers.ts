@@ -10,7 +10,7 @@ import {
 import {
     FastifyResponseAdapter,
     normalizeFastifyRequest,
-} from '../fastify-response-adapter'
+} from '../fastify-adapters'
 import { GetRoomController } from '../../../../interface-adapters/controllers/get-room-controller'
 import {
     UpdateRoomController,
@@ -34,7 +34,7 @@ export async function handleCreateRoom(
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<CreateRoomControllerInput>(request)
+        await normalizeFastifyRequest<CreateRoomControllerInput>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createRoomController.handle(normalizedRequest, fastifyResponseAdapter)
@@ -55,7 +55,7 @@ export async function handleUpdateRoom(
     )
 
     const normalizedRequest =
-        normalizeFastifyRequest<UpdateRoomControllerInput>(request)
+        await normalizeFastifyRequest<UpdateRoomControllerInput>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await createRoomController.handle(normalizedRequest, fastifyResponseAdapter)
@@ -69,7 +69,7 @@ export async function handleGetRoom(
 
     const getRoomController = new GetRoomController(roomsRepository)
 
-    const normalizedRequest = normalizeFastifyRequest<undefined>(request)
+    const normalizedRequest = await normalizeFastifyRequest<undefined>(request)
     const fastifyResponseAdapter = new FastifyResponseAdapter(reply)
 
     await getRoomController.handle(normalizedRequest, fastifyResponseAdapter)

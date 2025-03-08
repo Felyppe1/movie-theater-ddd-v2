@@ -1,8 +1,20 @@
+import { Readable } from 'stream'
+
+export interface RequestFile {
+    fieldname: string // Nome do campo no formulário
+    filename: string // Nome original do arquivo
+    mimetype: string // Tipo do arquivo
+    // encoding: string // Tipo de codificação
+    file: Readable // Stream do arquivo
+    toBuffer: () => Promise<Buffer>
+}
+
 export interface Request<T = unknown> {
-    body?: T
+    body: T
     params?: Record<string, string>
     query?: Record<string, string>
     headers?: Record<string, string>
+    file?: RequestFile
 }
 
 export interface Response<T = undefined> {
