@@ -13,6 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate branch name
-      run: |
-        BRANCH_NAME="${{ GITHUB_HEAD_REF }}"
-        echo "Branch name: $BRANCH_NAME"
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Branch name: $BRANCH_NAME"
