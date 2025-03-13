@@ -13,7 +13,7 @@
         "postinstall": "prisma generate"
     },
     "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown"
+        "src/**/*": "prettier --write --ignore-unknown"
     },
     "keywords": [],
     "author": "",

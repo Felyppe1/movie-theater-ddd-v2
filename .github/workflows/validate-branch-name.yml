@@ -1,0 +1,18 @@
+name: Validate Branch Name
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+      run: |
+        BRANCH_NAME="${{ GITHUB_HEAD_REF }}"
+        echo "Branch name: $BRANCH_NAME"
