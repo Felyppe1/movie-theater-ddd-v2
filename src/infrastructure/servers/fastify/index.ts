@@ -36,7 +36,7 @@ fastify.setErrorHandler((error, request, reply) => {
     return reply.status(500).send({ error: error.message })
 })
 
-export async function startFastifyServer(port = 3333) {
+export async function startFastifyLocalServer(port = 3333) {
     try {
         await fastify.listen({ port, host: '0.0.0.0' })
 

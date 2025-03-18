@@ -1,13 +1,16 @@
-import { ZodError, ZodSchema } from 'zod'
+import { z, ZodError, ZodSchema } from 'zod'
 import { InvalidDataError } from '../../../domain/errors/invalid-data-error'
 
-interface ValidateInput {
-    schema: ZodSchema
-    data: any
+interface ValidateInput<T extends ZodSchema> {
+    schema: T
+    data: unknown
 }
 
 export class ZodValidator {
-    static validate<T>({ schema, data }: ValidateInput): T {
+    static validate<T extends ZodSchema>({
+        schema,
+        data,
+    }: ValidateInput<T>): z.infer<T> {
         try {
             return schema.parse(data)
         } catch (error) {

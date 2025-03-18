@@ -1,6 +1,14 @@
 import { MovieTheater } from '../../../domain/core/movie-theater-settings/movie-theater'
 import { MovieTheatersRepository } from '../../interfaces/repositories/movie-theaters-repository'
-import { CreateMovieTheaterServiceInput } from './create-movie-theater-service-input'
+
+interface CreateMovieTheaterServiceInput {
+    number: string
+    complement?: string
+    zipCode: string
+    street: string
+    city: string
+    state: string
+}
 
 export class CreateMovieTheaterService {
     constructor(

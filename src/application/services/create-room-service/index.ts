@@ -5,7 +5,13 @@ import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-
 import { MovieTheatersRepository } from '../../interfaces/repositories/movie-theaters-repository'
 import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
-import { CreateRoomServiceInput } from './create-room-service-input'
+
+interface CreateRoomServiceInput {
+    movieTheaterId: string
+    number: number
+    layout: (string | null)[][]
+    technologyIds: string[]
+}
 
 export class CreateRoomService {
     constructor(

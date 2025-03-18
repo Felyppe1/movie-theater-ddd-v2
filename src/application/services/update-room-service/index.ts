@@ -4,7 +4,13 @@ import { NotFoundError } from '../../../domain/errors/not-found-error'
 import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
 import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
-import { UpdateRoomServiceInput } from './update-room-service-input'
+
+interface UpdateRoomServiceInput {
+    id: string
+    number: number
+    layout: (string | null)[][]
+    technologyIds: string[]
+}
 
 export class UpdateRoomService {
     constructor(

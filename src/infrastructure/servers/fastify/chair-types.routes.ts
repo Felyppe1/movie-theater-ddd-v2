@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify'
-import { handleCreateChairType } from './handlers/chair-types-handlers'
+import { createChairTypeController } from '../../../controllers/create-chair-type-controller'
 
 export async function chairTypesRoutes(fastify: FastifyInstance) {
     fastify.route({
         method: 'POST',
         url: '/',
-        handler: handleCreateChairType,
+        handler: createChairTypeController,
     })
 }

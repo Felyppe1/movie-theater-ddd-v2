@@ -1,9 +1,25 @@
 import { Bucket } from '../../interfaces/clouds/bucket'
 import { MoviesRepository } from '../../interfaces/repositories/movies-repository'
-import { CreateMovieServiceInput } from './create-movie-service-input'
-import { Movie } from '../../../domain/core/movie-theater-settings/movie'
+import {
+    CLASSIFICATION,
+    GENDER,
+    Movie,
+} from '../../../domain/core/movie-theater-settings/movie'
 import { InvalidDataError } from '../../../domain/errors/invalid-data-error'
 import { randomUUID } from 'crypto'
+
+interface CreateMovieServiceInput {
+    name: string
+    synopsis: string
+    duration: number
+    subtitled: boolean
+    genders: GENDER[]
+    classification: CLASSIFICATION
+    technologyIds: string[]
+    initialDate: Date
+    finalDate: Date
+    base64Poster: string
+}
 
 export class CreateMovieService {
     constructor(

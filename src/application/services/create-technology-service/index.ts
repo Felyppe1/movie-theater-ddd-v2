@@ -1,7 +1,10 @@
 import { Technology } from '../../../domain/core/movie-theater-settings/technology'
 import { ConflictError } from '../../../domain/errors/conflict-error'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
-import { CreateTechnologyServiceInput } from './create-technology-service-input'
+
+interface CreateTechnologyServiceInput {
+    name: string
+}
 
 export class CreateTechnologyService {
     constructor(

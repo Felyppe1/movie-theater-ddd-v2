@@ -1,7 +1,10 @@
 import { ChairType } from '../../../domain/core/movie-theater-settings/chair-type'
 import { ConflictError } from '../../../domain/errors/conflict-error'
 import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
-import { CreateChairTypeServiceInput } from './create-chair-type-service-input'
+
+interface CreateChairTypeServiceInput {
+    name: string
+}
 
 export class CreateChairTypeService {
     constructor(private readonly chairTypesRepository: ChairTypesRepository) {}

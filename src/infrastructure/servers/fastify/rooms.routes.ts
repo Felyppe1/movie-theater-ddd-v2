@@ -1,26 +1,24 @@
 import { FastifyInstance } from 'fastify'
-import {
-    handleCreateRoom,
-    handleGetRoom,
-    handleUpdateRoom,
-} from './handlers/rooms-handlers'
+import { createRoomController } from '../../../controllers/create-room-controller'
+import { updateRoomController } from '../../../controllers/update-room-controller'
+import { getRoomController } from '../../../controllers/get-room-controller'
 
 export async function roomsRoutes(fastify: FastifyInstance) {
     fastify.route({
         method: 'POST',
         url: '/',
-        handler: handleCreateRoom,
+        handler: createRoomController,
     })
 
     fastify.route({
         method: 'PUT',
         url: '/',
-        handler: handleUpdateRoom,
+        handler: updateRoomController,
     })
 
     fastify.route({
         method: 'GET',
         url: '/:id',
-        handler: handleGetRoom,
+        handler: getRoomController,
     })
 }
