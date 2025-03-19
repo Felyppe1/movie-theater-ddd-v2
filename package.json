@@ -10,7 +10,10 @@
         "prepare": "husky",
         "cli": "node dist/infrastructure/clis/commander/rooms.js",
         "vercel-build": "npx prisma migrate deploy",
-        "postinstall": "prisma generate"
+        "postinstall": "prisma generate",
+        "generate:movie-theater-settings": "npx prisma generate --schema=src/bounded-contexts/movie-theater-settings/infrastructure/databases/prisma/schema.prisma",
+        "migrate:movie-theater-settings": "npx prisma migrate dev --schema=src/bounded-contexts/movie-theater-settings/infrastructure/databases/prisma/schema.prisma",
+        "studio:movie-theater-settings": "npx prisma studio --schema=src/bounded-contexts/movie-theater-settings/infrastructure/databases/prisma/schema.prisma"
     },
     "lint-staged": {
         "src/**/*": "prettier --write --ignore-unknown"
@@ -20,9 +23,6 @@
     "license": "ISC",
     "type": "commonjs",
     "description": "",
-    "prisma": {
-        "schema": "src/infrastructure/databases/prisma/schema.prisma"
-    },
     "devDependencies": {
         "@eslint/js": "^9.20.0",
         "@types/express": "^5.0.0",
