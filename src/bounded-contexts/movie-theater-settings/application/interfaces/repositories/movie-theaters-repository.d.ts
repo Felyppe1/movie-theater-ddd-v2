@@ -1,4 +1,4 @@
-import { MovieTheater } from '../../../bounded-contexts/movie-theater-settings/domain/core/movie-theater-settings/movie-theater'
+import { MovieTheater } from '../../../domain/core/movie-theater'
 
 export interface MovieTheatersRepository {
     save(movieTheater: MovieTheater): Promise<void>

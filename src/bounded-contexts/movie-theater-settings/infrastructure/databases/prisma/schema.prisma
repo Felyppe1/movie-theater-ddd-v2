@@ -127,3 +127,24 @@ model MovieTechnology {
     @@id([technology_id, movie_id])
     @@map("movie_technology")
 }
+
+model Session {
+    id String @id @default(uuid())
+    datetime DateTime
+    is_subtitled Boolean
+
+    movie_id String
+    technology_id String
+
+    @@map("session")
+}
+
+model SessionChair {
+    session_id String
+    room_id String
+    row Int
+    column Int
+
+    @@id([session_id, room_id, row, column])
+    @@map("session_chair")
+}

@@ -103,6 +103,10 @@ export class Room {
         return this.movieTheaterId
     }
 
+    getTechnologyIds() {
+        return this.technologyIds
+    }
+
     export() {
         return {
             id: this.id,

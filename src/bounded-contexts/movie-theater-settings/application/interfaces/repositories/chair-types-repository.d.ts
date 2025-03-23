@@ -1,4 +1,4 @@
-import { ChairType } from '../../../bounded-contexts/movie-theater-settings/domain/core/movie-theater-settings/chair-type'
+import { ChairType } from '../../../domain/core/chair-type'
 
 export interface ChairTypesRepository {
     getAll(): Promise<ChairType[]>

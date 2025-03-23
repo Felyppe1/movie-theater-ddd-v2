@@ -33,4 +33,17 @@ export class PrismaTechnologiesRepository implements TechnologiesRepository {
             percentageIncrease: technology.percentageIncrease ?? undefined,
         })
     }
+
+    async getById(id: string): Promise<Technology | null> {
+        const technology = await prisma.technology.findUnique({
+            where: { id },
+        })
+
+        if (!technology) return null
+
+        return new Technology({
+            ...technology,
+            percentageIncrease: technology.percentageIncrease ?? undefined,
+        })
+    }
 }

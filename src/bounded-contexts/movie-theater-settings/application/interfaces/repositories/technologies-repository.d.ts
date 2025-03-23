@@ -1,7 +1,8 @@
-import { Technology } from '../../../bounded-contexts/movie-theater-settings/domain/core/movie-theater-settings/technology'
+import { Technology } from '../../../domain/core/technology'
 
 export interface TechnologiesRepository {
     getAll(): Promise<Technology[]>
     save(technology: Technology): Promise<void>
     getByName(name: string): Promise<Technology | null>
+    getById(id: string): Promise<Technology | null>
 }

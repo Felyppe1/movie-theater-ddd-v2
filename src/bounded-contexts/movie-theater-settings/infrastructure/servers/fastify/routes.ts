@@ -4,6 +4,7 @@ import { roomsRoutes } from './rooms.routes'
 import { technologiesRoutes } from './technologies.routes'
 import { chairTypesRoutes } from './chair-types.routes'
 import { moviesRoutes } from './movies.routes'
+import { sessionsRoutes } from './sessions.routes'
 
 export async function movieTheaterSettingsRoutes(fastify: FastifyInstance) {
     fastify.register(movieTheatersRoutes, { prefix: '/movie-theaters' })
@@ -11,4 +12,5 @@ export async function movieTheaterSettingsRoutes(fastify: FastifyInstance) {
     fastify.register(technologiesRoutes, { prefix: '/technologies' })
     fastify.register(chairTypesRoutes, { prefix: '/chair-types' })
     fastify.register(moviesRoutes, { prefix: '/movies' })
+    fastify.register(sessionsRoutes, { prefix: '/sessions' })
 }

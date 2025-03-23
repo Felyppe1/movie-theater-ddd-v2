@@ -125,6 +125,22 @@ export class Movie {
         return this.id
     }
 
+    getTechnologyIds() {
+        return this.technologyIds
+    }
+
+    getDuration() {
+        return this.duration
+    }
+
+    getInitialDate() {
+        return this.initialDate
+    }
+
+    getSubtitled() {
+        return this.subtitled
+    }
+
     export() {
         return {
             id: this.id,

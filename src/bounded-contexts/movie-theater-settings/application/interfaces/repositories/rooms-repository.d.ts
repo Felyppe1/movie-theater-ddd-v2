@@ -1,4 +1,4 @@
-import { Room } from '../../../bounded-contexts/movie-theater-settings/domain/core/movie-theater-settings/room'
+import { Room } from '../../../domain/core/room'
 
 export interface NumberExistsInTheater {
     number: number

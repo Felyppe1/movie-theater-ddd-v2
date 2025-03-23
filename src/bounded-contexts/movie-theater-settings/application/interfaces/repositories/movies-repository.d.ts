@@ -1,5 +1,6 @@
-import { Movie } from '../../../bounded-contexts/movie-theater-settings/domain/core/movie-theater-settings/movie'
+import { Movie } from '../../../domain/core/movie'
 
 export interface MoviesRepository {
     save(movie: Movie): Promise<void>
+    getById(id: string): Promise<Movie | null>
 }
