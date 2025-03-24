@@ -90,9 +90,9 @@ model ChairType {
 }
 
 model MovieTheaterChairType {
-    chair_type_id    Int
+    chair_type_id    String
     movie_theater_id String
-    value            Float?
+    value            Float
 
     // chairType ChairType @relation(fields: [chair_type_id], references: [id])
     // movieTheater MovieTheater @relation(fields: [movie_theater_id], references: [id])
@@ -102,7 +102,7 @@ model MovieTheaterChairType {
 }
 
 model Movie {
-    id             String           @id @default(uuid())
+    id             String         @id @default(uuid())
     name           String
     synopsis       String
     duration       Int
@@ -119,7 +119,7 @@ model Movie {
 
 model MovieTechnology {
     technology_id String
-    movie_id       String
+    movie_id      String
 
     // technology Technology @relation(fields: [technology_id], references: [id])
     // movie Movie @relation(fields: [movie_id], references: [id])
@@ -129,11 +129,11 @@ model MovieTechnology {
 }
 
 model Session {
-    id String @id @default(uuid())
-    datetime DateTime
+    id           String   @id @default(uuid())
+    datetime     DateTime
     is_subtitled Boolean
 
-    movie_id String
+    movie_id      String
     technology_id String
 
     @@map("session")
@@ -141,9 +141,9 @@ model Session {
 
 model SessionChair {
     session_id String
-    room_id String
-    row Int
-    column Int
+    room_id    String
+    row        Int
+    column     Int
 
     @@id([session_id, room_id, row, column])
     @@map("session_chair")
