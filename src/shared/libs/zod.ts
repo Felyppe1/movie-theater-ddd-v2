@@ -3,7 +3,7 @@ import { InvalidDataError } from '../domain/errors/invalid-data-error'
 
 interface ValidateInput<T extends ZodSchema> {
     schema: T
-    data: unknown
+    data: z.infer<T>
 }
 
 export class Zod {

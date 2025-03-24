@@ -24,4 +24,20 @@ export class PrismaChairTypesRepository implements ChairTypesRepository {
             data,
         })
     }
+
+    async getManyByRoomId(roomId: string): Promise<ChairType[]> {
+        const chairs = await prisma.chair.findMany({
+            where: { room_id: roomId },
+        })
+
+        const chairTypes = await prisma.chairType.findMany({
+            where: {
+                id: {
+                    in: chairs.map(chair => chair.chair_type_id),
+                },
+            },
+        })
+
+        return chairTypes.map(chairType => new ChairType(chairType))
+    }
 }

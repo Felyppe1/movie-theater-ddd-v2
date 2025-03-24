@@ -5,6 +5,8 @@ import { MoviesRepository } from '../../interfaces/repositories/movies-repositor
 import { RoomsRepository } from '../../interfaces/repositories/rooms-repository'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
 import { Session } from '../../../domain/core/session'
+import { ChairTypePricesRepository } from '../../interfaces/repositories/chair-type-prices-repository'
+import { ChairTypesRepository } from '../../interfaces/repositories/chair-types-repository'
 
 interface CreateSessionServiceInput {
     movieId: string
@@ -20,6 +22,8 @@ export class CreateSessionService {
         private readonly moviesRepository: MoviesRepository,
         private readonly roomsRepository: RoomsRepository,
         private readonly technologiesRepository: TechnologiesRepository,
+        private readonly chairTypePricesRepository: ChairTypePricesRepository,
+        private readonly chairTypesRepository: ChairTypesRepository,
     ) {}
 
     async execute(data: CreateSessionServiceInput) {
@@ -45,7 +49,21 @@ export class CreateSessionService {
             )
         }
 
-        // TODO: check if room's chairs have a price set
+        const chairTypesUsedInTheRoom =
+            await this.chairTypesRepository.getManyByRoomId(data.roomId)
+
+        const chairTypePrices = await this.chairTypePricesRepository.getMany({
+            chairTypeIds: chairTypesUsedInTheRoom.map(chairType =>
+                chairType.getId(),
+            ),
+            movieTheaterId: room.getMovieTheaterId(),
+        })
+
+        if (chairTypesUsedInTheRoom.length != chairTypePrices.length) {
+            throw new ConflictError(
+                'A chair type used in the room has no price set to the movie theater',
+            )
+        }
 
         if (data.schedule < movie.getInitialDate()) {
             throw new ConflictError(

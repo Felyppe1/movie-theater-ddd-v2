@@ -31,6 +31,10 @@ export class ChairTypePrice {
         this.chairTypeId = chairTypeId
     }
 
+    getPrice() {
+        return this.price
+    }
+
     export() {
         return {
             movieTheaterId: this.movieTheaterId,

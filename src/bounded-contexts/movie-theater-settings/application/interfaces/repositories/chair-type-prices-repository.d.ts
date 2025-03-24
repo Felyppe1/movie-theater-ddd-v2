@@ -2,7 +2,7 @@ import { ChairTypePrice } from '../../../domain/core/chair-type-price'
 
 export interface GetManyInput {
     movieTheaterId: string
-    chairTypeId: string
+    chairTypeIds: string[]
 }
 
 export interface ChairTypePricesRepository {

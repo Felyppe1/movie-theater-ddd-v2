@@ -12,7 +12,7 @@ export async function roomsRoutes(fastify: FastifyInstance) {
 
     fastify.route({
         method: 'PUT',
-        url: '/',
+        url: '/:id',
         handler: updateRoomController,
     })
 

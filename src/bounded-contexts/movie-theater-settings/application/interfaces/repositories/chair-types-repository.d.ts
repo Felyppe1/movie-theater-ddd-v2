@@ -4,4 +4,5 @@ export interface ChairTypesRepository {
     getAll(): Promise<ChairType[]>
     getByName(name: string): Promise<ChairType | null>
     save(chairType: ChairType): Promise<void>
+    getManyByRoomId(roomId: string): Promise<ChairType[]>
 }

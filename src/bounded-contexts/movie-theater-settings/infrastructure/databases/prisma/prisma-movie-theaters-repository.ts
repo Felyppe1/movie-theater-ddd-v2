@@ -1,4 +1,5 @@
 import { MovieTheatersRepository } from '../../../application/interfaces/repositories/movie-theaters-repository'
+import { ChairTypePrice } from '../../../domain/core/chair-type-price'
 import { MovieTheater } from '../../../domain/core/movie-theater'
 import { prisma } from './prisma-client'
 
@@ -30,6 +31,25 @@ export class PrismaMovieTheatersRepository implements MovieTheatersRepository {
                 new MovieTheater({
                     ...movieTheater,
                     complement: movieTheater.complement ?? undefined,
+                }),
+        )
+    }
+
+    async getChairTypePrices(
+        movieTheaterId: string,
+    ): Promise<ChairTypePrice[]> {
+        const chairTypePrices = await prisma.movieTheaterChairType.findMany({
+            where: {
+                movie_theater_id: movieTheaterId,
+            },
+        })
+
+        return chairTypePrices.map(
+            ({ chair_type_id, movie_theater_id, value }) =>
+                new ChairTypePrice({
+                    chairTypeId: chair_type_id,
+                    movieTheaterId: movie_theater_id,
+                    price: value,
                 }),
         )
     }

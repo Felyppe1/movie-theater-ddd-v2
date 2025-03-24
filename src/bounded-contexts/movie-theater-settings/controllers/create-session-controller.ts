@@ -6,6 +6,8 @@ import { PrismaSessionsRepository } from '../infrastructure/databases/prisma/pri
 import { PrismaTechnologiesRepository } from '../infrastructure/databases/prisma/prisma-technologies-repository'
 import { z } from 'zod'
 import { Zod } from '../../../shared/libs/zod'
+import { PrismaChairTypePricesRepository } from '../infrastructure/databases/prisma/prisma-chair-type-prices-repository'
+import { PrismaChairTypesRepository } from '../infrastructure/databases/prisma/prisma-chair-types-repository'
 
 interface CreateSessionRequestBody {
     movieId: string
@@ -42,12 +44,16 @@ export async function createSessionController(
     const moviesRepository = new PrismaMoviesRepository()
     const roomsRepository = new PrismaRoomsRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
+    const chairTypePricesRepository = new PrismaChairTypePricesRepository()
+    const chairTypesRepository = new PrismaChairTypesRepository()
 
     const createMovieSessionService = new CreateSessionService(
         sessionsRepository,
         moviesRepository,
         roomsRepository,
         technologiesRepository,
+        chairTypePricesRepository,
+        chairTypesRepository,
     )
 
     const movieSessionId =

@@ -12,11 +12,18 @@ export interface UpdateRoomControllerInput {
     technologyIds: string[]
 }
 
+export interface UpdateRoomControllerParamsRequest {
+    id: string
+}
+
 export async function updateRoomController(
-    request: FastifyRequest<{ Body: UpdateRoomControllerInput }>,
+    request: FastifyRequest<{
+        Body: UpdateRoomControllerInput
+        Params: UpdateRoomControllerParamsRequest
+    }>,
     response: FastifyReply,
 ) {
-    const { body } = request
+    const { body, params } = request
 
     const schema = z.object({
         id: z.string().min(1),
@@ -25,7 +32,13 @@ export async function updateRoomController(
         technologyIds: z.array(z.string().min(1)),
     })
 
-    const bodyValidated = Zod.validate({ schema, data: body })
+    const validatedData = Zod.validate({
+        schema,
+        data: {
+            ...body,
+            id: params.id,
+        },
+    })
 
     const roomsRepository = new PrismaRoomsRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
@@ -37,7 +50,7 @@ export async function updateRoomController(
         chairTypesRepository,
     )
 
-    await updateRoomService.execute(bodyValidated)
+    await updateRoomService.execute(validatedData)
 
     return await response.status(200).send()
 }

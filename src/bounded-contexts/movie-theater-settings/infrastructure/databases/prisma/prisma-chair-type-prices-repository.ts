@@ -11,7 +11,9 @@ export class PrismaChairTypePricesRepository
     async getMany(data: GetManyInput): Promise<ChairTypePrice[]> {
         const chairTypePrices = await prisma.movieTheaterChairType.findMany({
             where: {
-                chair_type_id: data.chairTypeId,
+                chair_type_id: {
+                    in: data.chairTypeIds.map(chairTypeId => chairTypeId),
+                },
                 movie_theater_id: data.movieTheaterId,
             },
         })
