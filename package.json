@@ -41,6 +41,7 @@
     "dependencies": {
         "@fastify/cors": "^11.0.0",
         "@fastify/multipart": "^9.0.3",
+        "@google-cloud/pubsub": "^4.10.0",
         "@google-cloud/storage": "^7.15.2",
         "@prisma/client": "^6.4.1",
         "dotenv": "^16.4.7",

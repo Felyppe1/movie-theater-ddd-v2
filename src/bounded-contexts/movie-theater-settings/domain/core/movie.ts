@@ -1,5 +1,7 @@
 import { randomUUID } from 'crypto'
 import { InvalidDataError } from '../../../../shared/domain/errors/invalid-data-error'
+import { AggregateRoot } from '../primitives/aggregate-root'
+import { MovieCreatedDomainEvent } from '../events/movie-created-domain-event'
 
 export enum GENDER {
     HORROR = 'HORROR',
@@ -31,7 +33,7 @@ export interface MovieInput {
 
 export interface CreateMovieInput extends Omit<MovieInput, 'id'> {}
 
-export class Movie {
+export class Movie extends AggregateRoot {
     private id: string
     private name: string
     private synopsis: string
@@ -45,10 +47,14 @@ export class Movie {
     private finalDate: Date
 
     static create(data: CreateMovieInput) {
-        return new Movie({
+        const newMovie = new Movie({
             id: randomUUID(),
             ...data,
         })
+
+        newMovie.raiseDomainEvent(new MovieCreatedDomainEvent(newMovie.getId()))
+
+        return newMovie
     }
 
     constructor({
@@ -64,6 +70,8 @@ export class Movie {
         initialDate,
         finalDate,
     }: MovieInput) {
+        super()
+
         if (!id) {
             throw new InvalidDataError('Id is required for Movie')
         }
@@ -139,6 +147,10 @@ export class Movie {
 
     getSubtitled() {
         return this.subtitled
+    }
+
+    hasTechnology(technologyId: string) {
+        return this.technologyIds.some(id => id === technologyId)
     }
 
     export() {

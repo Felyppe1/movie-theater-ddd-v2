@@ -77,27 +77,23 @@ export class CreateSessionService {
             )
         }
 
-        const movieHasTechnology = movie
-            .getTechnologyIds()
-            .some(technologyId => technologyId === data.technologyId)
-        const roomHasTechnology = room
-            .getTechnologyIds()
-            .some(technologyId => technologyId === data.technologyId)
+        const movieHasTheTechnology = movie.hasTechnology(data.technologyId)
+        const roomHasTheTechnology = room.hasTechnology(data.technologyId)
 
-        if (!movieHasTechnology || !roomHasTechnology) {
+        if (!movieHasTheTechnology || !roomHasTheTechnology) {
             throw new ConflictError(
                 `Movie and room must support the technology id ${data.technologyId}`,
             )
         }
 
-        const hasOverlappedSchedule =
+        const isThereOverlappedSchedule =
             await this.sessionsRepository.hasOverlappedSchedule({
                 durationInMinutes: movie.getDuration(),
                 roomId: room.getId(),
                 sessionDateTime: data.schedule,
             })
 
-        if (hasOverlappedSchedule) {
+        if (isThereOverlappedSchedule) {
             throw new ConflictError(
                 'The time of this session conflicts with another one',
             )

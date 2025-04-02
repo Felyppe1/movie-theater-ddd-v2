@@ -1,6 +1,8 @@
 import { Bucket } from '../../../../../shared/application/interfaces/clouds/bucket'
+import { PubSub } from '../../../../../shared/application/interfaces/pub-sub'
 import { InvalidDataError } from '../../../../../shared/domain/errors/invalid-data-error'
 import { CLASSIFICATION, GENDER, Movie } from '../../../domain/core/movie'
+import { MovieCreatedDomainEvent } from '../../../domain/events/movie-created-domain-event'
 import { MoviesRepository } from '../../interfaces/repositories/movies-repository'
 import { randomUUID } from 'crypto'
 
@@ -21,6 +23,7 @@ export class CreateMovieService {
     constructor(
         private readonly moviesRepository: MoviesRepository,
         private readonly bucket: Bucket,
+        private readonly pubsub: PubSub,
     ) {}
 
     async execute(data: CreateMovieServiceInput) {
@@ -53,7 +56,7 @@ export class CreateMovieService {
             )
         }
 
-        const bucketName = 'movie-theater-main'
+        const bucketName = 'movie-theater'
         const destinationPath = `poster/${randomUUID()}.${posterExtension}`
 
         const poster = await this.bucket.uploadFromBuffer({
@@ -70,7 +73,11 @@ export class CreateMovieService {
 
             await this.moviesRepository.save(newMovie)
 
-            // TODO: what if there was an error here?
+            const movieDomainEvents = newMovie.getDomainEvents()
+
+            movieDomainEvents.forEach(async event => {
+                await this.pubsub.publish(event.name, event)
+            })
 
             return newMovie.getId()
         } catch (e) {

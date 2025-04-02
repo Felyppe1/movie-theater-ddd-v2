@@ -107,6 +107,10 @@ export class Room {
         return this.technologyIds
     }
 
+    hasTechnology(technologyId: string) {
+        return this.technologyIds.some(id => id === technologyId)
+    }
+
     export() {
         return {
             id: this.id,
