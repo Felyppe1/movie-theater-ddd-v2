@@ -5,6 +5,8 @@ import { CLASSIFICATION, GENDER, Movie } from '../../../domain/core/movie'
 import { MovieCreatedDomainEvent } from '../../../domain/events/movie-created-domain-event'
 import { MoviesRepository } from '../../interfaces/repositories/movies-repository'
 import { randomUUID } from 'crypto'
+import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
+import { NotFoundError } from '../../../../../shared/domain/errors/not-found-error'
 
 interface CreateMovieServiceInput {
     name: string
@@ -22,11 +24,26 @@ interface CreateMovieServiceInput {
 export class CreateMovieService {
     constructor(
         private readonly moviesRepository: MoviesRepository,
+        private readonly technologiesRepository: TechnologiesRepository,
         private readonly bucket: Bucket,
         private readonly pubsub: PubSub,
     ) {}
 
     async execute(data: CreateMovieServiceInput) {
+        const technologies = await this.technologiesRepository.getAll()
+
+        const technologyIds = technologies.map(technology => technology.getId())
+
+        const technologyIdNotFound = data.technologyIds.find(
+            technologyId => !technologyIds.includes(technologyId),
+        )
+
+        if (technologyIdNotFound) {
+            throw new NotFoundError(
+                `Technology id ${technologyIdNotFound} not found`,
+            )
+        }
+
         const match = data.base64Poster.match(/^data:(.+);base64,(.+)/)
 
         if (!match) {
