@@ -5,9 +5,9 @@ services:
         ports:
             - 5433:5432
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=123
-            - POSTGRES_DB=movie-theater
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_DB=${DB_NAME}
         volumes:
             - movie-theater-data:/data/postgres
         networks:
@@ -20,8 +20,11 @@ services:
             - 5555:5555
         depends_on:
             - database
+        volumes:
+          - .:/app
+          - /app/node_modules
         environment:
-            - DATABASE_URL=postgresql://postgres:123@database:5432/movie-theater
+            - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@database:5432/${DB_NAME}
         networks:
             - movie-theater
 volumes:
