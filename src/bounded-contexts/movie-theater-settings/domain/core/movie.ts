@@ -166,6 +166,7 @@ export class Movie extends AggregateRoot {
             technologyIds: this.technologyIds,
             initialDate: this.initialDate,
             finalDate: this.finalDate,
+            domainEvents: this.getDomainEvents(),
         }
     }
 }

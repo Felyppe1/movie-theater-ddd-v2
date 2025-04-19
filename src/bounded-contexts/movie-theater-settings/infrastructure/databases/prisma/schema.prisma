@@ -148,3 +148,11 @@ model SessionChair {
     @@id([session_id, room_id, row, column])
     @@map("session_chair")
 }
+
+model Outbox {
+    id           String    @id @default(uuid())
+    event_name   String
+    payload      Json
+    occurred_on  DateTime  @default(now())
+    processed_on DateTime?
+}

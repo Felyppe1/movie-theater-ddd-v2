@@ -28,6 +28,15 @@ export class PrismaMoviesRepository implements MoviesRepository {
                     technology_id: technologyId,
                 })),
             }),
+
+            prisma.outbox.createMany({
+                data: data.domainEvents.map(event => ({
+                    id: event.id,
+                    event_name: event.name,
+                    occurred_on: event.ocurredOn,
+                    payload: event.toPrimitives(),
+                })),
+            }),
         ])
     }
 
