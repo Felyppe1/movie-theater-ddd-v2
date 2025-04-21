@@ -9,6 +9,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
             finalDate,
             classification,
             technologyIds,
+            domainEvents,
             ...data
         } = movie.export()
 
@@ -30,7 +31,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
             }),
 
             prisma.outbox.createMany({
-                data: data.domainEvents.map(event => ({
+                data: domainEvents.map(event => ({
                     id: event.id,
                     event_name: event.name,
                     occurred_on: event.ocurredOn,

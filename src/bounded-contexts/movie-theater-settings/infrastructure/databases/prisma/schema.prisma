@@ -155,4 +155,6 @@ model Outbox {
     payload      Json
     occurred_on  DateTime  @default(now())
     processed_on DateTime?
+
+    @@map("outbox")
 }
