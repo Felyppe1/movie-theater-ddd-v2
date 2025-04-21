@@ -1,23 +1,37 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { PrismaMovieTheatersRepository } from '../infrastructure/databases/prisma/prisma-movie-theaters-repository'
-import { MovieTheater } from '../domain/core/movie-theater'
 import { GetMovieTheatersService } from '../application/services/get-movie-theaters-service'
+import { PrismaDatabaseConnector } from '../infrastructure/databases/prisma/prisma-connector'
+import { Zod } from '../../../shared/libs/zod'
+import { z } from 'zod'
 
-export interface GetMovieTheatersResponseBody {
-    items: MovieTheater[]
+export interface GetMovieTheatersRequestQuery {
+    offset?: number
+    limit?: number
 }
 
 export async function getMovieTheatersController(
-    request: FastifyRequest<{ Reply: GetMovieTheatersResponseBody }>,
-    response: FastifyReply<{ Reply: GetMovieTheatersResponseBody }>,
+    request: FastifyRequest<{
+        Querystring: GetMovieTheatersRequestQuery
+    }>,
+    response: FastifyReply,
 ) {
-    const movieTheatersRepository = new PrismaMovieTheatersRepository()
+    const schema = z.object({
+        offset: z.coerce.number().optional(),
+        limit: z.coerce.number().min(1).max(50).optional(),
+    })
+
+    const validatedData = Zod.validate({
+        schema,
+        data: { offset: request.query.offset, limit: request.query.limit },
+    })
+
+    const databaseConnector = new PrismaDatabaseConnector()
 
     const getMovieTheatersService = new GetMovieTheatersService(
-        movieTheatersRepository,
+        databaseConnector,
     )
 
-    const movieTheaters = await getMovieTheatersService.execute()
+    const data = await getMovieTheatersService.execute(validatedData)
 
-    return await response.status(200).send({ items: movieTheaters })
+    return await response.status(200).send(data)
 }
