@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { PrismaRoomsRepository } from '../infrastructure/databases/prisma/prisma-rooms-repository'
 import { InvalidDataError } from '../../../shared/domain/errors/invalid-data-error'
 import { GetRoomService } from '../application/services/get-room-service'
+import { PrismaDatabaseConnector } from '../infrastructure/databases/prisma/prisma-connector'
 
 interface GetRoomRequestParams {
     id: string
@@ -11,7 +11,13 @@ export interface GetRoomResponseBody {
     id: string
     movieTheaterId: string
     number: number
-    layout: (string | null)[][]
+    rowLength: number
+    columnLength: number
+    chairs: {
+        row: number
+        column: number
+        chairTypeId: number
+    }
     technologyIds: string[]
 }
 
@@ -26,9 +32,9 @@ export async function getRoomController(
 
     if (!params.id) throw new InvalidDataError('Parameter id is required')
 
-    const roomsRepository = new PrismaRoomsRepository()
+    const databaseConnector = new PrismaDatabaseConnector()
 
-    const getRoomService = new GetRoomService(roomsRepository)
+    const getRoomService = new GetRoomService(databaseConnector)
 
     const room = await getRoomService.execute(params.id)
 
