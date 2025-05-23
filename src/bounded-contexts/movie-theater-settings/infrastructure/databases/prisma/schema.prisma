@@ -150,11 +150,12 @@ model SessionChair {
 }
 
 model Outbox {
-    id           String    @id @default(uuid())
-    event_name   String
-    payload      Json
-    occurred_on  DateTime  @default(now())
-    processed_on DateTime?
+    id         String    @id @default(uuid())
+    event_name String
+    payload    Json
+    status     String    @default("pending")
+    created_at DateTime  @default(now())
+    updated_at DateTime? @updatedAt
 
     @@map("outbox")
 }
