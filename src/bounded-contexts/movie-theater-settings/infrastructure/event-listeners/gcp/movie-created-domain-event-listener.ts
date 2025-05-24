@@ -3,13 +3,14 @@ import { MovieCreatedDomainEventHandler } from '../../../application/event-handl
 import { MovieCreatedDomainEvent } from '../../../domain/events/movie-created-domain-event'
 
 async function movieCreatedDomainEventListener() {
+    const TOPIC_NAME= 'movie-created-domain-event-sub'
     // const emailService = new EmailService()
 
     const movieCreatedDomainEventHandler = new MovieCreatedDomainEventHandler()
 
     const pubSub = new GCPPubSub()
 
-    await pubSub.subscribe('movie-created-domain-event-sub', async data => {
+    await pubSub.subscribe(TOPIC_NAME, async data => {
         try {
             console.log('Event received:', data)
             await movieCreatedDomainEventHandler.handle(

@@ -1,0 +1,5 @@
+google-cloud-pubsub
+SQLAlchemy
+psycopg2-binary
+functions-framework==3.*
+python-dotenv==1.*

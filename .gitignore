@@ -3,3 +3,7 @@ node_modules
 .vscode
 dist
 sa-key.json
+terraform.tfvars
+venv
+__pycache__
+.terraform
