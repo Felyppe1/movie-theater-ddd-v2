@@ -45,6 +45,7 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
     }
 
     depends_on = [
-        google_project_service.required_apis["cloudfunctions.googleapis.com"]
+        google_project_service.required_apis["cloudfunctions.googleapis.com"],
+        google_storage_bucket_object.mts_publish_outbox_object
     ]
 }
