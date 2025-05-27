@@ -3,7 +3,7 @@ resource "google_cloud_scheduler_job" "movie_theater_settings_publish_outbox_eve
   description      = "Scheduler to trigger a cloud function to publish events from the outbox table for movie theater settings bounded context"
   schedule         = "* * * * *"
   time_zone        = "America/Sao_Paulo"
-  attempt_deadline = "10s"
+#   attempt_deadline = "10s"
   project          = var.project
 
   http_target {
