@@ -56,8 +56,8 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     environment: Production
-    needs: terraform-plan  # <- Só roda depois do plan
-    if: github.event_name == 'workflow_dispatch'  # <- Só roda manualmente
+    needs: terraform-plan
+    # if: github.event_name == 'workflow_dispatch'
     env:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-sa.json
 
