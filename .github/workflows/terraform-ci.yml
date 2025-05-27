@@ -47,54 +47,63 @@ jobs:
         run: terraform plan -var-file="secrets.tfvars" -out=tfplan
         working-directory: terraform
 
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform/tfplan
+      
+      - name: Upload Cloud Functions Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloud-functions-build
+          path: cloud-functions/build
+
+  terraform-apply:
+    runs-on: ubuntu-latest
+    environment: Production
+    needs: terraform-plan
+    # if: github.event_name == 'workflow_dispatch'
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-sa.json
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Write service account JSON
+        run: |
+          cat <<EOF > ${{ github.workspace }}/terraform-sa.json
+          ${{ secrets.TERRAFORM_SA }}
+          EOF
+
+      - name: Create tfvars file
+        run: |
+          cat <<EOF > ${{ github.workspace }}/terraform/secrets.tfvars
+          project                       = "${{ secrets.PROJECT_ID }}"
+          region                        = "${{ secrets.REGION }}"
+          db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
+          EOF
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform
+
+      - name: Download Cloud Functions Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cloud-functions-build
+          path: cloud-functions/build
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: terraform
+
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         working-directory: terraform
-    #   - name: Upload Plan Artifact
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: terraform-plan
-    #       path: terraform/tfplan
-
-#   terraform-apply:
-#     runs-on: ubuntu-latest
-#     environment: Production
-#     needs: terraform-plan
-#     # if: github.event_name == 'workflow_dispatch'
-#     env:
-#       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-sa.json
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-
-#       - name: Set up Terraform
-#         uses: hashicorp/setup-terraform@v3
-
-#       - name: Write service account JSON
-#         run: |
-#           cat <<EOF > ${{ github.workspace }}/terraform-sa.json
-#           ${{ secrets.TERRAFORM_SA }}
-#           EOF
-
-#       - name: Create tfvars file
-#         run: |
-#           cat <<EOF > ${{ github.workspace }}/terraform/secrets.tfvars
-#           project                       = "${{ secrets.PROJECT_ID }}"
-#           region                        = "${{ secrets.REGION }}"
-#           db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
-#           EOF
-
-#       - name: Download Plan Artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: terraform-plan
-#           path: terraform
-
-#       - name: Initialize Terraform
-#         run: terraform init
-#         working-directory: terraform
-
-#       - name: Terraform Apply
-#         run: terraform apply -auto-approve tfplan
-#         working-directory: terraform
