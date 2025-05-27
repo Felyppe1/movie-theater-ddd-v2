@@ -1,7 +1,7 @@
 data "archive_file" "mts_publish_outbox_zip" {
     type = "zip"
     source_dir = "${path.module}/../cloud-functions/movie-theater-settings-publish-outbox"
-    output_path = "${path.module}/deploy/movie-theater-settings-publish-outbox.zip"
+    output_path = "${path.module}/../cloud-functions/movie-theater-settings-publish-outbox.zip"
 }
 
 resource "google_storage_bucket_object" "mts_publish_outbox_object" {
