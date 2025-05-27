@@ -1,0 +1,51 @@
+name: Terraform Plan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-sa.json
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Write service account JSON
+        run: |
+          cat <<EOF > ${{ github.workspace }}/terraform-sa.json
+          ${{ secrets.TERRAFORM_SA }}
+          EOF
+
+      - name: Create tfvars file
+        run: |
+          cat <<EOF > ${{ github.workspace }}/terraform/secrets.tfvars
+          project                       = "${{ secrets.PROJECT_ID }}"
+          region                        = "${{ secrets.REGION }}"
+          db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
+          EOF
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: terraform
+
+      - name: Validate Terraform
+        run: terraform validate
+        working-directory: terraform
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="secrets.tfvars" -out=tfplan
+        working-directory: terraform
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform/tfplan

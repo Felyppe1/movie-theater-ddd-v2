@@ -21,6 +21,8 @@ interface CreateMovieServiceInput {
     base64Poster: string
 }
 
+const BUCKET_NAME = 'movie-images-movie-theater-ddd'
+
 export class CreateMovieService {
     constructor(
         private readonly moviesRepository: MoviesRepository,
@@ -73,11 +75,10 @@ export class CreateMovieService {
             )
         }
 
-        const bucketName = 'movie-theater'
         const destinationPath = `poster/${randomUUID()}.${posterExtension}`
 
         const poster = await this.bucket.uploadFromBuffer({
-            bucketName,
+            bucketName: BUCKET_NAME,
             destinationPath,
             data: posterBuffer,
         })
@@ -90,15 +91,12 @@ export class CreateMovieService {
 
             await this.moviesRepository.save(newMovie)
 
-            const movieDomainEvents = newMovie.getDomainEvents()
-
-            movieDomainEvents.forEach(async event => {
-                await this.pubsub.publish(event.name, event)
-            })
-
             return newMovie.getId()
         } catch (e) {
-            await this.bucket.deleteFile({ bucketName, destinationPath })
+            await this.bucket.deleteFile({
+                bucketName: BUCKET_NAME,
+                destinationPath,
+            })
 
             throw e
         }
