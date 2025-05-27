@@ -3,11 +3,12 @@ name: Terraform Plan
 on:
   push:
     branches:
-      - main
+      - '**'
 
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
+    environment: Production
     env:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/terraform-sa.json
 
