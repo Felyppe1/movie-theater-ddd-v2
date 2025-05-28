@@ -49,3 +49,63 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
         google_storage_bucket_object.mts_publish_outbox_object
     ]
 }
+
+
+
+
+
+
+
+data "archive_file" "send_email_zip" {
+    type = "zip"
+    source_dir = "${path.module}/../cloud-functions/send-email"
+    output_path = "${path.module}/../cloud-functions/build/send-email.zip"
+}
+
+resource "google_storage_bucket_object" "send_email_object" {
+    source = data.archive_file.send_email_zip.output_path
+    content_type = "application/zip"
+    name = "publish-${data.archive_file.send_email_zip.output_md5}.zip"
+    bucket = google_storage_bucket.cloud_functions_bucket.name
+    depends_on = [
+        google_storage_bucket.cloud_functions_bucket,
+        data.archive_file.send_email_zip
+    ]
+}
+
+resource "google_cloudfunctions2_function" "send_email_function" {
+    name = "send-email"
+    location = var.region
+    project = var.project
+    description = "Cloud function created through terraform to send emails"
+
+    build_config {
+        runtime = "python312"
+        entry_point = "main"
+
+        source {
+            storage_source {
+                bucket = google_storage_bucket.cloud_functions_bucket.name
+                object = google_storage_bucket_object.send_email_object.name
+            }
+        }
+    }
+
+    service_config {
+        max_instance_count = 1
+        available_memory = "256M"
+        timeout_seconds = 400
+        # service_account_email = google_service_account.service_account.email
+        environment_variables = {
+            SMTP_SERVER = "${var.smtp_server}"
+            SMTP_PORT = "${var.smtp_port}"
+            EMAIL_SENDER = "${var.email_sender}"
+            EMAIL_PASSWORD = "${var.email_password}"
+        }
+    }
+
+    depends_on = [
+        google_project_service.required_apis["cloudfunctions.googleapis.com"],
+        google_storage_bucket_object.send_email_object
+    ]
+}

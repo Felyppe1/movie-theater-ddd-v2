@@ -6,5 +6,6 @@ export class MovieCreatedDomainEventHandler {
 
     async handle(data: MovieCreatedDomainEvent) {
         console.log('Processando o evento movie-created: ', data)
+        throw new Error('Teste')
     }
 }

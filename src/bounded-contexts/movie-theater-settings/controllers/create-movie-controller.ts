@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { Zod } from '../../../shared/libs/zod'
 import { GCPBucket } from '../../../shared/infrastructure/clouds/gcp/gcp-bucket'
 import { CreateMovieService } from '../application/services/create-movie-service'
-import { GCPPubSub } from '../../../shared/infrastructure/clouds/gcp/gcp-pubsub'
 import { PrismaTechnologiesRepository } from '../infrastructure/databases/prisma/prisma-technologies-repository'
 
 export interface CreateMovieRequestBody {
@@ -42,13 +41,11 @@ export async function createMovieController(
     const moviesRepository = new PrismaMoviesRepository()
     const technologiesRepository = new PrismaTechnologiesRepository()
     const bucket = new GCPBucket()
-    const pubsub = new GCPPubSub()
 
     const createMovieService = new CreateMovieService(
         moviesRepository,
         technologiesRepository,
         bucket,
-        pubsub,
     )
 
     const movieId = await createMovieService.execute({

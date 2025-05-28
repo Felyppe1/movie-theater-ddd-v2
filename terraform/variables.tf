@@ -17,3 +17,19 @@ variable "region" {
 variable "db_url_movie_theater_settings" {
     description = "Database URL for the movie theater settings bounded context"
 }
+
+variable "smtp_server" {
+    description = "SMTP server for sending emails"
+}
+
+variable "smtp_port" {
+    description = "SMTP port for sending emails"
+}   
+
+variable "email_sender" {
+    description = "Email address used to send emails"
+}
+
+variable "email_password" {
+    description = "Password for the email address used to send emails"
+}
