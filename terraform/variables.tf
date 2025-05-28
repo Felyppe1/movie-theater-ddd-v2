@@ -13,6 +13,9 @@ variable "region" {
 # variable "application_secret_manager_name" {
 #     description = "Name of the secret manager used in the cloud function extract"
 # }
+variable "db_url" {
+    description = "Database URL"
+}
 
 variable "db_url_movie_theater_settings" {
     description = "Database URL for the movie theater settings bounded context"

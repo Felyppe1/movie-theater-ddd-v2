@@ -39,8 +39,8 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
         timeout_seconds = 400
         # service_account_email = google_service_account.service_account.email
         environment_variables = {
-            PROJECT_ID = "${var.project}"
-            DB_URL = "${var.db_url_movie_theater_settings}"
+            PROJECT_ID = var.project
+            DB_URL = var.db_url
         }
     }
 
