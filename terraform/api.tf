@@ -11,6 +11,9 @@ resource "google_project_service" "required_apis" {
         "storage.googleapis.com",
         "run.googleapis.com",
         "workflowexecutions.googleapis.com",
+        "cloudbuild.googleapis.com",
+        "pubsub.googleapis.com",
+        "artifactregistry.googleapis.com",
         "cloudbuild.googleapis.com"
     ])
 

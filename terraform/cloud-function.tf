@@ -97,15 +97,23 @@ resource "google_cloudfunctions2_function" "send_email_function" {
         timeout_seconds = 400
         # service_account_email = google_service_account.service_account.email
         environment_variables = {
-            SMTP_SERVER = "${var.smtp_server}"
-            SMTP_PORT = "${var.smtp_port}"
-            EMAIL_SENDER = "${var.email_sender}"
-            EMAIL_PASSWORD = "${var.email_password}"
+            SMTP_SERVER = var.smtp_server
+            SMTP_PORT = var.smtp_port
+            EMAIL_SENDER = var.email_sender
+            EMAIL_PASSWORD = var.email_password
         }
+    }
+
+    event_trigger {
+        trigger_region = var.region
+        event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
+        pubsub_topic   = google_pubsub_topic.send_email.id
+        retry_policy   = "RETRY_POLICY_RETRY"
     }
 
     depends_on = [
         google_project_service.required_apis["cloudfunctions.googleapis.com"],
+        google_project_service.required_apis["pubsub.googleapis.com"],
         google_storage_bucket_object.send_email_object
     ]
 }

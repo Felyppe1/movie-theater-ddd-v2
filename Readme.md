@@ -11,4 +11,6 @@
 
 
 ## Rodar cloud functions:
-1. Executar o comando `functions-framework --target=main --debug`
+Executar o comando:
+- `functions-framework --target=main --debug` para http
+- `functions-framework --target=main --signature-type=cloudevent` para pubsub

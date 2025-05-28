@@ -53,4 +53,10 @@ export class PrismaOutboxRepository implements OutboxRepository {
 
         return updatedPrismaEvent
     }
+
+    async save(event: Outbox): Promise<void> {
+        await this.prisma.outbox.create({
+            data: event,
+        })
+    }
 }
