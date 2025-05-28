@@ -1,11 +1,11 @@
-import { PubSub as GCPubSub } from '@google-cloud/pubsub'
-import { PubSub } from '../../../application/interfaces/pub-sub'
+import { PubSub } from '@google-cloud/pubsub'
+import { EventBus } from '../../../application/interfaces/event-bus'
 
-export class GCPPubSub implements PubSub {
-    private pubSub: GCPubSub
+export class GCPPubSub implements EventBus {
+    private pubSub: PubSub
 
     constructor() {
-        this.pubSub = new GCPubSub({
+        this.pubSub = new PubSub({
             projectId: process.env.PROJECT_ID,
             keyFilename: 'sa-key.json',
         })

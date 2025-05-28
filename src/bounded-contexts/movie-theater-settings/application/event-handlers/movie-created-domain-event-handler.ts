@@ -5,6 +5,6 @@ export class MovieCreatedDomainEventHandler {
     constructor(/* private readonly emailService: EmailService */) {}
 
     async handle(data: MovieCreatedDomainEvent) {
-        console.log('Evento chegou no handler: ', data)
+        console.log('Processando o evento movie-created: ', data)
     }
 }

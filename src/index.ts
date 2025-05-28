@@ -1,12 +1,10 @@
-import {
-    fastify,
-    startFastifyLocalServer,
-} from './shared/infrastructure/servers/fastify'
-import './shared/infrastructure/event-listeners/gcp'
+import { fastify } from './shared/infrastructure/servers/fastify'
+import { startEventListeners } from './shared/infrastructure/event-listeners'
 
-// export default async (req: any, res: any) => {
-//     await fastify.ready()
-//     fastify.server.emit('request', req, res)
-// }
+startEventListeners()
 
-startFastifyLocalServer()
+export default async (req: any, res: any) => {
+    await fastify.ready()
+
+    fastify.server.emit('request', req, res)
+}

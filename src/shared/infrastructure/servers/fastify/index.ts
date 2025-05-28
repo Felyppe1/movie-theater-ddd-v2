@@ -35,14 +35,3 @@ fastify.setErrorHandler((error, request, reply) => {
 
     return reply.status(500).send({ error: error.message })
 })
-
-export async function startFastifyLocalServer(port = 3333) {
-    try {
-        await fastify.listen({ port, host: '0.0.0.0' })
-
-        console.log(`Fastify server is running on http://localhost:${port}`)
-    } catch (error) {
-        console.error(`Failed to start server: ${error}`)
-        process.exit(1)
-    }
-}

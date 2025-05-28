@@ -1,8 +1,6 @@
 import { Bucket } from '../../../../../shared/application/interfaces/clouds/bucket'
-import { PubSub } from '../../../../../shared/application/interfaces/pub-sub'
 import { InvalidDataError } from '../../../../../shared/domain/errors/invalid-data-error'
 import { CLASSIFICATION, GENDER, Movie } from '../../../domain/core/movie'
-import { MovieCreatedDomainEvent } from '../../../domain/events/movie-created-domain-event'
 import { MoviesRepository } from '../../interfaces/repositories/movies-repository'
 import { randomUUID } from 'crypto'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
@@ -28,7 +26,6 @@ export class CreateMovieService {
         private readonly moviesRepository: MoviesRepository,
         private readonly technologiesRepository: TechnologiesRepository,
         private readonly bucket: Bucket,
-        private readonly pubsub: PubSub,
     ) {}
 
     async execute(data: CreateMovieServiceInput) {

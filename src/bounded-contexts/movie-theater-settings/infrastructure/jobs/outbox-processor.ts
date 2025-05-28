@@ -1,5 +1,5 @@
 import { prisma } from '../databases/prisma/prisma-client'
-import { PubSub } from '../../../../shared/application/interfaces/pub-sub'
+import { EventBus } from '../../../../shared/application/interfaces/event-bus'
 import { OutboxRepository } from './outbox-repository'
 import { GCPPubSub } from '../../../../shared/infrastructure/clouds/gcp/gcp-pubsub'
 import { PrismaOutboxRepository } from '../databases/prisma/prisma-outbox-repository'
@@ -9,7 +9,7 @@ const BATCH_SIZE = 10
 export class OutboxWorker {
     constructor(
         private readonly outboxRepository: OutboxRepository,
-        private readonly pubsub: PubSub,
+        private readonly pubsub: EventBus,
     ) {}
 
     async processPendingEvents() {
