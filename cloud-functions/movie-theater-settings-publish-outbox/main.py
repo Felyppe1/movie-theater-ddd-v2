@@ -5,21 +5,28 @@ from google.cloud import secretmanager
 from sqlalchemy import create_engine, text
 import functions_framework
 from dotenv import load_dotenv
+from google.cloud.sql.connector import Connector, IPTypes
 
 load_dotenv()
 
 PROJECT_ID = os.getenv('PROJECT_ID')
-if not PROJECT_ID:
-    raise ValueError("PROJECT_ID environment variable is not set.")
-
+REGION = os.getenv('REGION')
 APPLICATION_SECRET_NAME = os.getenv('APPLICATION_SECRET_NAME')
-if not APPLICATION_SECRET_NAME:
-    raise ValueError('APPLICATION_SECRET_NAME environment variable is not set')
 
+for var_name, var_value in {
+    "PROJECT_ID": PROJECT_ID,
+    "REGION": REGION,
+    "APPLICATION_SECRET_NAME": APPLICATION_SECRET_NAME,
+}.items():
+    if not var_value:
+        raise ValueError(f"Environment variable '{var_name}' is not set.")
+    
 DB_URL = None
+EMAIL_PASSWORD = None
 
 _publisher = None
 _engine = None
+connector = Connector()
 
 def get_publisher():
     global _publisher
@@ -30,11 +37,27 @@ def get_publisher():
 def get_engine():
     global _engine
     if _engine is None:
-        _engine = create_engine(DB_URL)
+        def getconn():
+            conn = connector.connect(
+                f"{PROJECT_ID}:{REGION}:movie-theater-db",
+                "pg8000",
+                user="postgres",
+                password=EMAIL_PASSWORD,
+                db="movie_theater",
+                ip_type=IPTypes.PUBLIC  # ou IPTypes.PRIVATE se quiser usar IP privado
+            )
+            return conn
+
+        _engine = create_engine(
+            "postgresql+pg8000://",
+            creator=getconn,
+        )
+
     return _engine
 
 def get_secret_manager_secret():
     global DB_URL
+    global EMAIL_PASSWORD
 
     print('Getting secret manager secret')
     
@@ -46,6 +69,7 @@ def get_secret_manager_secret():
     credentials = json.loads(response.payload.data.decode('UTF-8'))
 
     DB_URL = credentials.get('db_url')
+    EMAIL_PASSWORD = credentials.get('email_password')
 
 def publish_message(topic_name, payload):
     publisher = get_publisher()
@@ -57,6 +81,8 @@ def publish_message(topic_name, payload):
     publisher.publish(topic_path, message_bytes)
 
 def process_outbox():
+    print('Processing outbox events')
+
     BATCH_SIZE = 30
 
     engine = get_engine()
