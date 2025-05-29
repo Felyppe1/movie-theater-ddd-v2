@@ -36,7 +36,7 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
     service_config {
         max_instance_count = 1
         available_memory = "256M"
-        timeout_seconds = 400
+        timeout_seconds = 540
         # service_account_email = google_service_account.service_account.email
         environment_variables = {
             PROJECT_ID = var.project
