@@ -2,5 +2,6 @@ google-cloud-pubsub
 SQLAlchemy
 psycopg2-binary
 google-cloud-secret-manager==2.*
+cloud-sql-python-connector[pg8000]
 functions-framework==3.*
 python-dotenv==1.*
