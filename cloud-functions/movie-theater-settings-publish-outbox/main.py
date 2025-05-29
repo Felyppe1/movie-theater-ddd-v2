@@ -3,10 +3,10 @@ import json
 from google.cloud import pubsub_v1
 from google.cloud import secretmanager
 from sqlalchemy import create_engine, text
-from sqlalchemy.pool import NullPool
+# from sqlalchemy.pool import NullPool
 import functions_framework
 from dotenv import load_dotenv
-from google.cloud.sql.connector import Connector, IPTypes
+# from google.cloud.sql.connector import Connector, IPTypes
 
 load_dotenv()
 
@@ -27,21 +27,7 @@ EMAIL_PASSWORD = None
 
 _publisher = None
 _engine = None
-connector = Connector()
-
-def test():
-    try:
-        engine = get_engine()
-
-        with engine.connect() as conn:
-            result = conn.execute(text("SELECT current_database(), inet_server_addr();"))
-            for row in result:
-                print(f"Connected to DB: {row}")
-
-        return "DB Connection Success!", 200
-    except Exception as e:
-        print(f"Error: {e}")
-        return f"Error: {e}", 500
+# connector = Connector()
 
 def get_publisher():
     global _publisher
@@ -52,21 +38,24 @@ def get_publisher():
 def get_engine():
     global _engine
     if _engine is None:
-        def getconn():
-            conn = connector.connect(
-                f"{PROJECT_ID}:{REGION}:movie-theater-db",
-                "pg8000",
-                user="postgres",
-                password=EMAIL_PASSWORD,
-                db="movie_theater",
-                ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
-            )
-            return conn
+        # def getconn():
+        #     conn = connector.connect(
+        #         f"{PROJECT_ID}:{REGION}:movie-theater-db",
+        #         "pg8000",
+        #         user="postgres",
+        #         password=EMAIL_PASSWORD,
+        #         db="movie_theater",
+        #         ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
+        #     )
+        #     return conn
 
         _engine = create_engine(
-            "postgresql+pg8000://",
-            creator=getconn,
-            poolclass=NullPool
+            DB_URL,
+            connect_args={
+                "sslmode": "require"
+            }
+            # creator=getconn,
+            # poolclass=NullPool
         )
 
     return _engine
@@ -142,7 +131,7 @@ def main(request):
     get_secret_manager_secret()
     
     test()
-    
+
     process_outbox()
 
     return 'Processed outbox events'
