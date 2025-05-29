@@ -42,11 +42,14 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
             PROJECT_ID = var.project
             APPLICATION_SECRET_NAME = var.application_secret_name
         }
+        vpc_connector = google_vpc_access_connector.vpc_connector.name
+        vpc_connector_egress_settings = "ALL_TRAFFIC"
     }
 
     depends_on = [
         google_project_service.required_apis["cloudfunctions.googleapis.com"],
-        google_storage_bucket_object.mts_publish_outbox_object
+        google_storage_bucket_object.mts_publish_outbox_object,
+        google_vpc_access_connector.vpc_connector
     ]
 }
 
