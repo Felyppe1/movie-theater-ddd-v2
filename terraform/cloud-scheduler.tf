@@ -6,6 +6,10 @@ resource "google_cloud_scheduler_job" "movie_theater_settings_publish_outbox_eve
 #   attempt_deadline = "10s"
   project          = var.project
 
+  retry_config {
+    retry_count          = 3
+    min_backoff_duration = "5s"
+  }
   http_target {
     uri         = "https://${var.region}-${var.project}.cloudfunctions.net/${google_cloudfunctions2_function.mts_publish_outbox_function.name}"
     http_method = "GET"
