@@ -35,7 +35,7 @@ jobs:
           db_url                        = "${{ secrets.DB_URL }}"
           db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
           smtp_port                     = "${{ secrets.SMTP_PORT }}"
-          smtp_host                     = "${{ secrets.SMTP_HOST }}"
+          smtp_server                   = "${{ secrets.SMTP_SERVER }}"
           email_sender                  = "${{ secrets.EMAIL_SENDER }}"
           email_password                = "${{ secrets.EMAIL_PASSWORD }}"
           EOF
@@ -93,7 +93,7 @@ jobs:
           db_url                        = "${{ secrets.DB_URL }}"
           db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
           smtp_port                     = "${{ secrets.SMTP_PORT }}"
-          smtp_host                     = "${{ secrets.SMTP_HOST }}"
+          smtp_server                   = "${{ secrets.SMTP_SERVER }}"
           email_sender                  = "${{ secrets.EMAIL_SENDER }}"
           email_password                = "${{ secrets.EMAIL_PASSWORD }}"
           EOF
