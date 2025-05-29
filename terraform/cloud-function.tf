@@ -40,7 +40,7 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
         # service_account_email = google_service_account.service_account.email
         environment_variables = {
             PROJECT_ID = var.project
-            DB_URL = var.db_url
+            APPLICATION_SECRET_NAME = var.application_secret_name
         }
     }
 
@@ -97,10 +97,8 @@ resource "google_cloudfunctions2_function" "send_email_function" {
         timeout_seconds = 400
         # service_account_email = google_service_account.service_account.email
         environment_variables = {
-            SMTP_SERVER = var.smtp_server
-            SMTP_PORT = var.smtp_port
-            EMAIL_SENDER = var.email_sender
-            EMAIL_PASSWORD = var.email_password
+            PROJECT_ID = var.project
+            APPLICATION_SECRET_NAME = var.application_secret_name
         }
     }
 

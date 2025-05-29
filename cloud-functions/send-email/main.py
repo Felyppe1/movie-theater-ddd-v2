@@ -6,27 +6,51 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import functions_framework
 from dotenv import load_dotenv
+from google.cloud import secretmanager
 
 load_dotenv()
 
-SMTP_SERVER = os.environ.get("SMTP_SERVER")
-SMTP_PORT = os.environ.get("SMTP_PORT")
-EMAIL_SENDER = os.environ.get("EMAIL_SENDER")
-EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+PROJECT_ID = os.environ.get("PROJECT_ID")
+APPLICATION_SECRET_NAME = os.environ.get("APPLICATION_SECRET_NAME")
 
 for var_name, var_value in {
-    "SMTP_SERVER": SMTP_SERVER,
-    "SMTP_PORT": SMTP_PORT,
-    "EMAIL_SENDER": EMAIL_SENDER,
-    "EMAIL_PASSWORD": EMAIL_PASSWORD
+    "PROJECT_ID": PROJECT_ID,
+    "APPLICATION_SECRET_NAME": APPLICATION_SECRET_NAME,
 }.items():
     if not var_value:
         raise ValueError(f"Environment variable '{var_name}' is not set.")
 
+SMTP_SERVER = None
+SMTP_PORT = None
+EMAIL_SENDER = None
+EMAIL_PASSWORD = None
+
+def get_secret_manager_secret():
+    global SMTP_SERVER
+    global SMTP_PORT
+    global EMAIL_SENDER
+    global EMAIL_PASSWORD
+
+    print('Getting secret manager secret')
+    
+    secretManagerClient = secretmanager.SecretManagerServiceClient()
+
+    request = { "name": f"projects/{PROJECT_ID}/secrets/{APPLICATION_SECRET_NAME}/versions/latest" }
+    response = secretManagerClient.access_secret_version(request)
+
+    credentials = json.loads(response.payload.data.decode('UTF-8'))
+
+    SMTP_SERVER = credentials.get('smtp_server')
+    SMTP_PORT = credentials.get('smtp_port')
+    EMAIL_SENDER = credentials.get('email_sender')
+    EMAIL_PASSWORD = credentials.get('email_password')
+
 @functions_framework.cloud_event
 def main(cloud_event):
+    get_secret_manager_secret()
+
     print('Sending emails')
-    
+
     try:
         pubsub_message = base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
         request_json = json.loads(pubsub_message)

@@ -32,12 +32,7 @@ jobs:
           cat <<EOF > ${{ github.workspace }}/terraform/secrets.tfvars
           project                       = "${{ secrets.PROJECT_ID }}"
           region                        = "${{ secrets.REGION }}"
-          db_url                        = "${{ secrets.DB_URL }}"
-          db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
-          smtp_port                     = "${{ secrets.SMTP_PORT }}"
-          smtp_server                   = "${{ secrets.SMTP_SERVER }}"
-          email_sender                  = "${{ secrets.EMAIL_SENDER }}"
-          email_password                = "${{ secrets.EMAIL_PASSWORD }}"
+          application_secret_name       = "${{ secrets.APPLICATION_SECRET_NAME }}"
           EOF
 
       - name: Initialize Terraform
@@ -90,12 +85,7 @@ jobs:
           cat <<EOF > ${{ github.workspace }}/terraform/secrets.tfvars
           project                       = "${{ secrets.PROJECT_ID }}"
           region                        = "${{ secrets.REGION }}"
-          db_url                        = "${{ secrets.DB_URL }}"
-          db_url_movie_theater_settings = "${{ secrets.DB_URL_MOVIE_THEATER_SETTINGS }}"
-          smtp_port                     = "${{ secrets.SMTP_PORT }}"
-          smtp_server                   = "${{ secrets.SMTP_SERVER }}"
-          email_sender                  = "${{ secrets.EMAIL_SENDER }}"
-          email_password                = "${{ secrets.EMAIL_PASSWORD }}"
+          application_secret_name       = "${{ secrets.APPLICATION_SECRET_NAME }}"
           EOF
 
       - name: Download Plan Artifact

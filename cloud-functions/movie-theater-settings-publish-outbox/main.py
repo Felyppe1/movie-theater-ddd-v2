@@ -1,6 +1,7 @@
 import os
 import json
 from google.cloud import pubsub_v1
+from google.cloud import secretmanager
 from sqlalchemy import create_engine, text
 import functions_framework
 from dotenv import load_dotenv
@@ -10,14 +11,31 @@ load_dotenv()
 PROJECT_ID = os.getenv('PROJECT_ID')
 if not PROJECT_ID:
     raise ValueError("PROJECT_ID environment variable is not set.")
-DB_URL = os.getenv('DB_URL')
-if not DB_URL:
-    raise ValueError("DB_URL environment variable is not set.")
+
+APPLICATION_SECRET_NAME = os.getenv('APPLICATION_SECRET_NAME')
+if not APPLICATION_SECRET_NAME:
+    raise ValueError('APPLICATION_SECRET_NAME environment variable is not set')
+
+DB_URL = None
 
 BATCH_SIZE = 30
 
 publisher = pubsub_v1.PublisherClient()
 engine = create_engine(DB_URL)
+
+def get_secret_manager_secret():
+    global DB_URL
+
+    print('Getting secret manager secret')
+    
+    secretManagerClient = secretmanager.SecretManagerServiceClient()
+
+    request = { "name": f"projects/{PROJECT_ID}/secrets/{APPLICATION_SECRET_NAME}/versions/latest" }
+    response = secretManagerClient.access_secret_version(request)
+
+    credentials = json.loads(response.payload.data.decode('UTF-8'))
+
+    DB_URL = credentials.get('db_url')
 
 def publish_message(topic_name, payload):
     topic_path = publisher.topic_path(PROJECT_ID, topic_name)
@@ -63,6 +81,8 @@ def process_outbox():
 
 @functions_framework.http
 def main(request):
+    get_secret_manager_secret()
+    
     process_outbox()
 
     return 'Processed outbox events'
