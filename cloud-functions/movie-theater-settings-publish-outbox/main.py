@@ -3,6 +3,7 @@ import json
 from google.cloud import pubsub_v1
 from google.cloud import secretmanager
 from sqlalchemy import create_engine, text
+from sqlalchemy.pool import NullPool
 import functions_framework
 from dotenv import load_dotenv
 from google.cloud.sql.connector import Connector, IPTypes
@@ -28,6 +29,20 @@ _publisher = None
 _engine = None
 connector = Connector()
 
+def test():
+    try:
+        engine = get_engine()
+
+        with engine.connect() as conn:
+            result = conn.execute(text("SELECT current_database(), inet_server_addr();"))
+            for row in result:
+                print(f"Connected to DB: {row}")
+
+        return "DB Connection Success!", 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return f"Error: {e}", 500
+
 def get_publisher():
     global _publisher
     if _publisher is None:
@@ -51,6 +66,7 @@ def get_engine():
         _engine = create_engine(
             "postgresql+pg8000://",
             creator=getconn,
+            poolclass=NullPool
         )
 
     return _engine
@@ -124,6 +140,8 @@ def process_outbox():
 @functions_framework.http
 def main(request):
     get_secret_manager_secret()
+    
+    test()
     
     process_outbox()
 
