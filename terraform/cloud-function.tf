@@ -102,6 +102,7 @@ resource "google_cloudfunctions2_function" "send_email_function" {
         environment_variables = {
             PROJECT_ID = var.project
             APPLICATION_SECRET_NAME = var.application_secret_name
+            REGION = var.region
         }
     }
 
