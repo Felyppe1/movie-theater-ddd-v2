@@ -48,7 +48,6 @@ def get_engine():
         #         ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
         #     )
         #     return conn
-
         _engine = create_engine(
             DB_URL,
             connect_args={
@@ -90,41 +89,41 @@ def process_outbox():
 
     BATCH_SIZE = 30
 
-    engine = get_engine()
+    # engine = get_engine()
 
-    with engine.begin() as conn:
-        conn.execute(text('SET search_path TO movie_theater_settings'))
+    # with engine.begin() as conn:
+    #     conn.execute(text('SET search_path TO movie_theater_settings'))
 
-        result = conn.execute(text(f"""
-            SELECT id, event_name, payload
-            FROM outbox
-            WHERE status != 'published'
-            ORDER BY created_at
-            LIMIT {BATCH_SIZE}
-        """))
+    #     result = conn.execute(text(f"""
+    #         SELECT id, event_name, payload
+    #         FROM outbox
+    #         WHERE status != 'published'
+    #         ORDER BY created_at
+    #         LIMIT {BATCH_SIZE}
+    #     """))
 
-        events = result.fetchall()
+    #     events = result.fetchall()
 
-        for event in events:
-            event_id, event_name, payload = event
-            try:
-                publish_message(event_name, payload)
+    #     for event in events:
+    #         event_id, event_name, payload = event
+    #         try:
+    #             publish_message(event_name, payload)
 
-                conn.execute(text("""
-                    UPDATE outbox
-                    SET status = 'published'
-                    WHERE id = :id
-                """), {'id': event_id})
+    #             conn.execute(text("""
+    #                 UPDATE outbox
+    #                 SET status = 'published'
+    #                 WHERE id = :id
+    #             """), {'id': event_id})
 
-                print(f"Event {event_id} ({event_name}) published successfully.")
-            except Exception as e:
-                print(f"Failed to publish event {event_id}: {e}")
+    #             print(f"Event {event_id} ({event_name}) published successfully.")
+    #         except Exception as e:
+    #             print(f"Failed to publish event {event_id}: {e}")
 
-                conn.execute(text("""
-                    UPDATE outbox
-                    SET status = 'failed'
-                    WHERE id = :id
-                """), {'id': event_id})
+    #             conn.execute(text("""
+    #                 UPDATE outbox
+    #                 SET status = 'failed'
+    #                 WHERE id = :id
+    #             """), {'id': event_id})
 
 @functions_framework.http
 def main(request):
