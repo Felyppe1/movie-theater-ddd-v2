@@ -14,7 +14,8 @@ resource "google_project_iam_member" "sa_roles_runner" {
         "roles/run.invoker",
         "roles/workflows.invoker",
         "roles/logging.logWriter",
-        "roles/secretmanager.secretAccessor"
+        "roles/secretmanager.secretAccessor",
+        "roles/cloudsql.client"
     ])
 
     role = each.value

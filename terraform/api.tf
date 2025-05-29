@@ -15,7 +15,8 @@ resource "google_project_service" "required_apis" {
         "pubsub.googleapis.com",
         "artifactregistry.googleapis.com",
         "cloudbuild.googleapis.com",
-        "eventarc.googleapis.com"
+        "eventarc.googleapis.com",
+        "vpcaccess.googleapis.com"
     ])
 
     project = var.project
