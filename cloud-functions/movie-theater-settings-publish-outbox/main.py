@@ -44,7 +44,7 @@ def get_engine():
                 user="postgres",
                 password=EMAIL_PASSWORD,
                 db="movie_theater",
-                ip_type=IPTypes.PUBLIC  # ou IPTypes.PRIVATE se quiser usar IP privado
+                ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
             )
             return conn
 
