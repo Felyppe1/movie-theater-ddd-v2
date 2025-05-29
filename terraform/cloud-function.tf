@@ -37,7 +37,7 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
         max_instance_count = 1
         available_memory = "256M"
         timeout_seconds = 540
-        # service_account_email = google_service_account.service_account.email
+        service_account_email = google_service_account.service_account.email
         environment_variables = {
             PROJECT_ID = var.project
             APPLICATION_SECRET_NAME = var.application_secret_name
@@ -95,7 +95,7 @@ resource "google_cloudfunctions2_function" "send_email_function" {
         max_instance_count = 1
         available_memory = "256M"
         timeout_seconds = 400
-        # service_account_email = google_service_account.service_account.email
+        service_account_email = google_service_account.service_account.email
         environment_variables = {
             PROJECT_ID = var.project
             APPLICATION_SECRET_NAME = var.application_secret_name
