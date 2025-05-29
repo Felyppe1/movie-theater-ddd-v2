@@ -18,10 +18,20 @@ if not APPLICATION_SECRET_NAME:
 
 DB_URL = None
 
-BATCH_SIZE = 30
+_publisher = None
+_engine = None
 
-publisher = pubsub_v1.PublisherClient()
-engine = create_engine(DB_URL)
+def get_publisher():
+    global _publisher
+    if _publisher is None:
+        _publisher = pubsub_v1.PublisherClient()
+    return _publisher
+
+def get_engine():
+    global _engine
+    if _engine is None:
+        _engine = create_engine(DB_URL)
+    return _engine
 
 def get_secret_manager_secret():
     global DB_URL
@@ -38,6 +48,8 @@ def get_secret_manager_secret():
     DB_URL = credentials.get('db_url')
 
 def publish_message(topic_name, payload):
+    publisher = get_publisher()
+
     topic_path = publisher.topic_path(PROJECT_ID, topic_name)
 
     message_bytes = json.dumps(payload).encode("utf-8")
@@ -45,6 +57,10 @@ def publish_message(topic_name, payload):
     publisher.publish(topic_path, message_bytes)
 
 def process_outbox():
+    BATCH_SIZE = 30
+
+    engine = get_engine()
+
     with engine.begin() as conn:
         conn.execute(text('SET search_path TO movie_theater_settings'))
 
