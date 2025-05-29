@@ -24,7 +24,9 @@ services:
           - .:/app
           - /app/node_modules
         environment:
-            - MOVIE_THEATER_SETTINGS_DB_URL=postgresql://${DB_USER}:${DB_PASSWORD}@database:5432/${DB_NAME}?schema=movie_theater_settings
+            - MOVIE_THEATER_SETTINGS_DB_URL=${MOVIE_THEATER_SETTINGS_DB_URL}
+            - FRONTEND_URL=${FRONTEND_URL}
+            - PROJECT_ID=${PROJECT_ID}
         networks:
             - movie-theater
 volumes:
