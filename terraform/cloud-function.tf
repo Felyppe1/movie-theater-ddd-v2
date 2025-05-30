@@ -83,6 +83,7 @@ resource "google_cloudfunctions2_function" "send_email_function" {
     project = var.project
     description = "Cloud function created through terraform to send emails"
 
+
     build_config {
         runtime = "python312"
         entry_point = "main"
@@ -99,6 +100,7 @@ resource "google_cloudfunctions2_function" "send_email_function" {
         max_instance_count = 1
         available_memory = "256M"
         timeout_seconds = 400
+        min_instance_count = 1
         service_account_email = google_service_account.service_account.email
         environment_variables = {
             PROJECT_ID = var.project
