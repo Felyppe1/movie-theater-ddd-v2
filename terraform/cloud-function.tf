@@ -41,6 +41,7 @@ resource "google_cloudfunctions2_function" "mts_publish_outbox_function" {
         environment_variables = {
             PROJECT_ID = var.project
             REGION = var.region
+            # DB_INSTANCE_ID = var.db_instance_id
             APPLICATION_SECRET_NAME = var.application_secret_name
         }
         vpc_connector = google_vpc_access_connector.vpc_connector.name

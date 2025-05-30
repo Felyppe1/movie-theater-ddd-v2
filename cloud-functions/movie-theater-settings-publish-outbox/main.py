@@ -22,7 +22,7 @@ for var_name, var_value in {
 }.items():
     if not var_value:
         raise ValueError(f"Environment variable '{var_name}' is not set.")
-    
+
 DB_URL = None
 EMAIL_PASSWORD = None
 
@@ -49,13 +49,15 @@ def get_engine():
         #         ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
         #     )
         #     return conn
+        # unix_socket_path = f"/cloudsql/{DB_INSTANCE_ID}"
+
         _engine = create_engine(
             DB_URL,
-            connect_args={
-                "sslmode": "require",
-                "gssencmode": "disable"
-                # "sslrootcert": os.path.join(os.path.dirname(__file__), "ca.pem")
-            }
+            # connect_args={
+            #     "sslmode": "require",
+            #     "gssencmode": "disable"
+            #     # "sslrootcert": os.path.join(os.path.dirname(__file__), "ca.pem")
+            # }
         )
 
     return _engine
