@@ -5,4 +5,4 @@ google-cloud-secret-manager==2.*
 cloud-sql-python-connector[pg8000]
 functions-framework==3.*
 python-dotenv==1.*
-psycopg>=3.*
+psycopg==3.*
