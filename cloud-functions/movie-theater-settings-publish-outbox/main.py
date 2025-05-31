@@ -30,6 +30,10 @@ _publisher = None
 _engine = None
 # connector = Connector()
 
+print("Tests:")
+print("/cloudsql exists?", os.path.exists("/cloudsql"))
+print("instance exists?", os.path.exists("/cloudsql/movie-theater-ddd:us-central1:movie-theater-db"))
+
 def get_publisher():
     global _publisher
     if _publisher is None:
