@@ -17,6 +17,7 @@ export class MovieCreatedDomainEventHandler {
         const event: Outbox = {
             id: randomUUID(),
             event_name: 'send-email',
+            messaging_type: 'CLOUD_TASKS',
             payload: {
                 to: users,
                 subject: 'Teste de envio de email',

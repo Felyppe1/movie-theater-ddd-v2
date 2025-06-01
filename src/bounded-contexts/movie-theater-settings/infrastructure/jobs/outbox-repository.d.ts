@@ -1,6 +1,9 @@
+type MESSAGING_TYPE = 'PUBSUB' | 'CLOUD_TASKS'
+
 export interface Outbox {
     id: string
     event_name: string
+    messaging_type: MESSAGING_TYPE
     payload: any
     status: string
     created_at: Date

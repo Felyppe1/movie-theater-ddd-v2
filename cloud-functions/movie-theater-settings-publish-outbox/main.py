@@ -2,6 +2,7 @@ import os
 import json
 from google.cloud import pubsub_v1
 from google.cloud import secretmanager
+from google.cloud import tasks_v2
 from sqlalchemy import create_engine, text
 # from sqlalchemy.pool import NullPool
 import functions_framework
@@ -68,6 +69,44 @@ def publish_message(topic_name, payload):
 
     publisher.publish(topic_path, message_bytes)
 
+def create_cloud_task(queue_name, payload):
+    client = tasks_v2.CloudTasksClient()
+
+    parent = client.queue_path(PROJECT_ID, REGION, queue_name)
+
+    base_url = f'https://{REGION}-{PROJECT_ID}.cloudfunctions.net'
+
+    TASK_HANDLER_URLS = {
+        'send-email': f'{base_url}/send-email',
+    }
+
+    url = TASK_HANDLER_URLS.get(queue_name)
+    if not url:
+        raise ValueError(f"No target URL configured for: {queue_name}")
+
+    event_id = payload.get('id')
+    if not event_id:
+        raise ValueError('Payload precisa ter o campo "id" para nomear a task')
+
+    task_name = client.task_path(PROJECT_ID, REGION, queue_name, event_id)
+
+    task = {
+        'name': task_name,
+        'http_request': {
+            'http_method': tasks_v2.HttpMethod.POST,
+            'url': url,
+            'headers': {
+                'Content-Type': 'application/json',
+            },
+            'body': json.dumps(payload).encode()
+        }
+    }
+
+    response = client.create_task(parent=parent, task=task)
+
+    print(f"Created Cloud Task: {response.name}")
+
+
 def process_outbox():
     print('Processing outbox events')
 
@@ -79,7 +118,7 @@ def process_outbox():
         conn.execute(text('SET search_path TO movie_theater_settings'))
 
         result = conn.execute(text(f"""
-            SELECT id, event_name, payload
+            SELECT id, event_name, payload, messaging_type
             FROM outbox
             WHERE status != 'published'
             ORDER BY created_at
@@ -89,9 +128,14 @@ def process_outbox():
         events = result.fetchall()
 
         for event in events:
-            event_id, event_name, payload = event
+            event_id, event_name, payload, messaging_type = event
             try:
-                publish_message(event_name, payload)
+                if messaging_type == 'PubSub':
+                    publish_message(event_name, payload)
+                elif messaging_type == 'CLOUD_TASKS':
+                    create_cloud_task(event_name, payload)
+                else:
+                    raise ValueError(f"Unknown messaging type: {messaging_type}")
 
                 conn.execute(text("""
                     UPDATE outbox

@@ -18,6 +18,11 @@ enum CLASSIFICATION {
     TWELVE @map("12")
 }
 
+enum MESSAGING_TYPE {
+    PUBSUB      @map("PubSub")
+    CLOUD_TASKS @map("CloudTasks")
+}
+
 model Chair {
     row    Int
     column Int
@@ -150,12 +155,13 @@ model SessionChair {
 }
 
 model Outbox {
-    id         String    @id @default(uuid())
-    event_name String
-    payload    Json
-    status     String    @default("pending")
-    created_at DateTime  @default(now())
-    updated_at DateTime? @updatedAt
+    id             String         @id @default(uuid())
+    event_name     String
+    messaging_type MESSAGING_TYPE
+    payload        Json
+    status         String         @default("pending")
+    created_at     DateTime       @default(now())
+    updated_at     DateTime?      @updatedAt
 
     @@map("outbox")
 }

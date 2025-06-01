@@ -34,6 +34,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
                 data: domainEvents.map(event => ({
                     id: event.id,
                     event_name: event.name,
+                    messaging_type: 'PUBSUB',
                     created_at: event.ocurredOn,
                     payload: event.toPrimitives(),
                 })),
