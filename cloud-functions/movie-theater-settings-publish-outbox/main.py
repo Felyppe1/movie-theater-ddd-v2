@@ -15,11 +15,13 @@ load_dotenv()
 PROJECT_ID = os.getenv('PROJECT_ID')
 REGION = os.getenv('REGION')
 APPLICATION_SECRET_NAME = os.getenv('APPLICATION_SECRET_NAME')
+SERVICE_ACCOUNT_EMAIL = os.getenv('SERVICE_ACCOUNT_EMAIL')
 
 for var_name, var_value in {
     "PROJECT_ID": PROJECT_ID,
     "REGION": REGION,
     "APPLICATION_SECRET_NAME": APPLICATION_SECRET_NAME,
+    "SERVICE_ACCOUNT_EMAIL": SERVICE_ACCOUNT_EMAIL,
 }.items():
     if not var_value:
         raise ValueError(f"Environment variable '{var_name}' is not set.")
@@ -69,7 +71,7 @@ def publish_message(topic_name, payload):
 
     publisher.publish(topic_path, message_bytes)
 
-def create_cloud_task(queue_name, payload):
+def create_cloud_task(queue_name, task_name, payload):
     client = tasks_v2.CloudTasksClient()
 
     parent = client.queue_path(PROJECT_ID, REGION, queue_name)
@@ -84,11 +86,7 @@ def create_cloud_task(queue_name, payload):
     if not url:
         raise ValueError(f"No target URL configured for: {queue_name}")
 
-    event_id = payload.get('id')
-    if not event_id:
-        raise ValueError('Payload precisa ter o campo "id" para nomear a task')
-
-    task_name = client.task_path(PROJECT_ID, REGION, queue_name, event_id)
+    task_name = client.task_path(PROJECT_ID, REGION, queue_name, task_name)
 
     task = {
         'name': task_name,
@@ -98,7 +96,10 @@ def create_cloud_task(queue_name, payload):
             'headers': {
                 'Content-Type': 'application/json',
             },
-            'body': json.dumps(payload).encode()
+            'body': json.dumps(payload).encode(),
+            'oidc_token': {
+                'service_account_email': SERVICE_ACCOUNT_EMAIL,
+            }
         }
     }
 
@@ -132,8 +133,8 @@ def process_outbox():
             try:
                 if messaging_type == 'PubSub':
                     publish_message(event_name, payload)
-                elif messaging_type == 'CLOUD_TASKS':
-                    create_cloud_task(event_name, payload)
+                elif messaging_type == 'CloudTasks':
+                    create_cloud_task(event_name, event_id, payload)
                 else:
                     raise ValueError(f"Unknown messaging type: {messaging_type}")
 

@@ -107,6 +107,7 @@ resource "google_cloudfunctions2_function" "send_email_function" {
             PROJECT_ID = var.project
             APPLICATION_SECRET_NAME = var.application_secret_name
             REGION = var.region
+            SERVICE_ACCOUNT_EMAIL = google_service_account.service_account.email
         }
     }
 
