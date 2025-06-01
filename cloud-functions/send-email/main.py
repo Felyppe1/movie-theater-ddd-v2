@@ -1,14 +1,11 @@
 import os
 import smtplib
-import base64
 import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from flask import jsonify
 import functions_framework
-from dotenv import load_dotenv
 from google.cloud import secretmanager
-
-load_dotenv()
 
 PROJECT_ID = os.environ.get("PROJECT_ID")
 APPLICATION_SECRET_NAME = os.environ.get("APPLICATION_SECRET_NAME")
@@ -26,41 +23,33 @@ EMAIL_SENDER = None
 EMAIL_PASSWORD = None
 
 def get_secret_manager_secret():
-    global SMTP_SERVER
-    global SMTP_PORT
-    global EMAIL_SENDER
-    global EMAIL_PASSWORD
+    global SMTP_SERVER, SMTP_PORT, EMAIL_SENDER, EMAIL_PASSWORD
 
-    print('Getting secret manager secret')
-    
     secretManagerClient = secretmanager.SecretManagerServiceClient()
 
     request = { "name": f"projects/{PROJECT_ID}/secrets/{APPLICATION_SECRET_NAME}/versions/latest" }
+
     response = secretManagerClient.access_secret_version(request)
 
-    credentials = json.loads(response.payload.data.decode('UTF-8'))
+    credentials = json.loads(response.payload.data.decode("UTF-8"))
 
-    SMTP_SERVER = credentials.get('smtp_server')
-    SMTP_PORT = credentials.get('smtp_port')
-    EMAIL_SENDER = credentials.get('email_sender')
-    EMAIL_PASSWORD = credentials.get('email_password')
+    SMTP_SERVER = credentials.get("smtp_server")
+    SMTP_PORT = credentials.get("smtp_port")
+    EMAIL_SENDER = credentials.get("email_sender")
+    EMAIL_PASSWORD = credentials.get("email_password")
 
-@functions_framework.cloud_event
-def main(cloud_event):
+@functions_framework.http
+def main(request):
     get_secret_manager_secret()
 
-    print('Sending emails')
-
     try:
-        pubsub_message = base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
-        request_json = json.loads(pubsub_message)
-        
+        request_json = request.get_json()
         to_email = request_json.get("to")
         subject = request_json.get("subject")
         body = request_json.get("body")
 
         if not to_email or not subject or not body:
-            raise ValueError("Missing 'to', 'subject' or 'body' in message")
+            return jsonify({ "error": "Missing 'to', 'subject' or 'body'" }), 400
 
         if isinstance(to_email, list):
             to_email = ", ".join(to_email)
@@ -76,6 +65,8 @@ def main(cloud_event):
             server.sendmail(EMAIL_SENDER, to_email, message.as_string())
 
         print(f"Email sent to {to_email}")
+        return jsonify({ "status": "success" }), 200
+
     except Exception as e:
         print(f"Failed to send email: {e}")
-        raise
+        return jsonify({ "error": str(e) }), 500

@@ -28,11 +28,6 @@ EMAIL_PASSWORD = None
 
 _publisher = None
 _engine = None
-# connector = Connector()
-
-print("Tests:")
-print("/cloudsql exists?", os.path.exists("/cloudsql"))
-print("instance exists?", os.path.exists("/cloudsql/movie-theater-ddd:us-central1:movie-theater-db"))
 
 def get_publisher():
     global _publisher
@@ -43,26 +38,7 @@ def get_publisher():
 def get_engine():
     global _engine
     if _engine is None:
-        # def getconn():
-        #     conn = connector.connect(
-        #         f"{PROJECT_ID}:{REGION}:movie-theater-db",
-        #         "pg8000",
-        #         user="postgres",
-        #         password=EMAIL_PASSWORD,
-        #         db="movie_theater",
-        #         ip_type=IPTypes.PRIVATE  # ou IPTypes.PRIVATE se quiser usar IP privado
-        #     )
-        #     return conn
-        # unix_socket_path = f"/cloudsql/{DB_INSTANCE_ID}"
-
-        _engine = create_engine(
-            DB_URL,
-            # connect_args={
-            #     "sslmode": "require",
-            #     "gssencmode": "disable"
-            #     # "sslrootcert": os.path.join(os.path.dirname(__file__), "ca.pem")
-            # }
-        )
+        _engine = create_engine(DB_URL)
 
     return _engine
     
@@ -137,15 +113,6 @@ def process_outbox():
 def main(request):
     get_secret_manager_secret()
     
-    # try:
-    #     with psycopg.connect(DB_URL) as conn:
-    #         with conn.cursor() as cur:
-    #             cur.execute("SELECT version();")
-    #             version = cur.fetchone()[0]
-    #             print("Connected! PostgreSQL version:", version)
-    # except Exception as e:
-    #     print("Erro ao conectar:", e)
-
     process_outbox()
 
     return 'Processed outbox events', 200
