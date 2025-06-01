@@ -52,7 +52,6 @@ def main(cloud_event):
     print('Sending emails')
 
     try:
-        raise Exception('Teste')
         pubsub_message = base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
         request_json = json.loads(pubsub_message)
         
