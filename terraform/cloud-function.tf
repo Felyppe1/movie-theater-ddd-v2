@@ -78,48 +78,48 @@ resource "google_storage_bucket_object" "send_email_object" {
     ]
 }
 
-# resource "google_cloudfunctions2_function" "send_email_function" {
-#     name = "send-email"
-#     location = var.region
-#     project = var.project
-#     description = "Cloud function created through terraform to send emails"
+resource "google_cloudfunctions2_function" "send_email_function" {
+    name = "send-email"
+    location = var.region
+    project = var.project
+    description = "Cloud function created through terraform to send emails"
 
 
-#     build_config {
-#         runtime = "python312"
-#         entry_point = "main"
+    build_config {
+        runtime = "python312"
+        entry_point = "main"
 
-#         source {
-#             storage_source {
-#                 bucket = google_storage_bucket.cloud_functions_bucket.name
-#                 object = google_storage_bucket_object.send_email_object.name
-#             }
-#         }
-#     }
+        source {
+            storage_source {
+                bucket = google_storage_bucket.cloud_functions_bucket.name
+                object = google_storage_bucket_object.send_email_object.name
+            }
+        }
+    }
 
-#     service_config {
-#         max_instance_count = 1
-#         available_memory = "256M"
-#         timeout_seconds = 400
-#         min_instance_count = 1
-#         service_account_email = google_service_account.service_account.email
-#         environment_variables = {
-#             PROJECT_ID = var.project
-#             APPLICATION_SECRET_NAME = var.application_secret_name
-#             REGION = var.region
-#         }
-#     }
+    service_config {
+        max_instance_count = 1
+        available_memory = "256M"
+        timeout_seconds = 400
+        min_instance_count = 1
+        service_account_email = google_service_account.service_account.email
+        environment_variables = {
+            PROJECT_ID = var.project
+            APPLICATION_SECRET_NAME = var.application_secret_name
+            REGION = var.region
+        }
+    }
 
-#     event_trigger {
-#         trigger_region = var.region
-#         event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-#         pubsub_topic   = google_pubsub_topic.send_email.id
-#         retry_policy   = "RETRY_POLICY_RETRY"
-#     }
+    event_trigger {
+        trigger_region = var.region
+        event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
+        pubsub_topic   = google_pubsub_topic.send_email.id
+        retry_policy   = "RETRY_POLICY_RETRY"
+    }
 
-#     depends_on = [
-#         google_project_service.required_apis["cloudfunctions.googleapis.com"],
-#         google_project_service.required_apis["pubsub.googleapis.com"],
-#         google_storage_bucket_object.send_email_object
-#     ]
-# }
+    depends_on = [
+        google_project_service.required_apis["cloudfunctions.googleapis.com"],
+        google_project_service.required_apis["pubsub.googleapis.com"],
+        google_storage_bucket_object.send_email_object
+    ]
+}
