@@ -6,3 +6,4 @@ cloud-sql-python-connector[pg8000]
 functions-framework==3.*
 python-dotenv==1.*
 psycopg==3.*
+google-cloud-tasks
