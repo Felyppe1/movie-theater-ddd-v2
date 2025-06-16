@@ -4,7 +4,6 @@ import { CLASSIFICATION, GENDER, Movie } from '../../../domain/core/movie'
 import { MoviesRepository } from '../../interfaces/repositories/movies-repository'
 import { randomUUID } from 'crypto'
 import { TechnologiesRepository } from '../../interfaces/repositories/technologies-repository'
-import { NotFoundError } from '../../../../../shared/domain/errors/not-found-error'
 
 interface CreateMovieServiceInput {
     name: string
@@ -30,18 +29,7 @@ export class CreateMovieService {
 
     async execute(data: CreateMovieServiceInput) {
         const technologies = await this.technologiesRepository.getAll()
-
         const technologyIds = technologies.map(technology => technology.getId())
-
-        const technologyIdNotFound = data.technologyIds.find(
-            technologyId => !technologyIds.includes(technologyId),
-        )
-
-        if (technologyIdNotFound) {
-            throw new NotFoundError(
-                `Technology id ${technologyIdNotFound} not found`,
-            )
-        }
 
         const match = data.base64Poster.match(/^data:(.+);base64,(.+)/)
 
@@ -81,10 +69,13 @@ export class CreateMovieService {
         })
 
         try {
-            const newMovie = Movie.create({
-                ...data,
-                poster,
-            })
+            const newMovie = Movie.create(
+                {
+                    ...data,
+                    poster,
+                },
+                technologyIds,
+            )
 
             await this.moviesRepository.save(newMovie)
 

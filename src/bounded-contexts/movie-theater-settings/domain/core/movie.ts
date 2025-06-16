@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 import { InvalidDataError } from '../../../../shared/domain/errors/invalid-data-error'
 import { AggregateRoot } from '../primitives/aggregate-root'
 import { MovieCreatedDomainEvent } from '../events/movie-created-domain-event'
+import { NotFoundError } from '../../../../shared/domain/errors/not-found-error'
 
 export enum GENDER {
     HORROR = 'HORROR',
@@ -46,7 +47,17 @@ export class Movie extends AggregateRoot {
     private initialDate: Date
     private finalDate: Date
 
-    static create(data: CreateMovieInput) {
+    static create(data: CreateMovieInput, existingTechnologyIds: string[]) {
+        const technologyIdNotFound = data.technologyIds.find(
+            technologyId => !existingTechnologyIds.includes(technologyId),
+        )
+
+        if (technologyIdNotFound) {
+            throw new NotFoundError(
+                `Technology id ${technologyIdNotFound} not found`,
+            )
+        }
+
         const newMovie = new Movie({
             id: randomUUID(),
             ...data,
